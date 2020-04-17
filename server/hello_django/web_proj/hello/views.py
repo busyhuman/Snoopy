@@ -1,19 +1,23 @@
-from django.shortcuts import render
+from .models import User, Food 
+from rest_framework import generics
+from .serializers import UserSerializer, FoodSerializer
+from django_filters import rest_framework, NumberFilter
+
 from django.http import HttpResponse
-import json
-from collections import OrderedDict
-from .models import User, Food #models에 정의된 Candidate를 불러온다
+import csv
+import os
+import django
 
-def home(request):
-    food = Food.objects.all()
+class UserCreateReadView(generics.ListCreateAPIView):
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = (rest_framework.DjangoFilterBackend, )
+    filter_fields = ('ID',)
+    """
 
-    file_data = OrderedDict()
-    s = ""
-    for foo in food:
-        file_data["Num"] = foo.Num
-        file_data["Food_Name"] = foo.Food_Name
-        file_data["Kcal"] = foo.Kcal
-        s += json.dumps(file_data, ensure_ascii=False, indent="\t")
-        s += "<br>"
-    return HttpResponse(s)
-
+class FoodAPIView(generics.ListCreateAPIView):    
+    queryset = Food.objects.all()  
+    serializer_class = FoodSerializer    
+    filter_backends = (rest_framework.DjangoFilterBackend, )
+    filter_fields = ('Num', )
