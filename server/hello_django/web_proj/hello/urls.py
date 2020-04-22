@@ -1,17 +1,20 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.urls import path
 from hello import views
+from rest_framework import routers
+from .views import UserViewSet, BookmarkViewSet, StatsViewSet
+
+router = routers.DefaultRouter()
+router.register('users', UserViewSet)
+router.register('bookmarks', BookmarkViewSet)
+router.register('stats', StatsViewSet)
+
 
 urlpatterns = [
-   path(
-        'api/v1/users/', #1 
-        views.UserCreateReadView.as_view(),
-        name='user_rest_api' #2
-        ),
-   path(
-        'api/v1/foods/', #3
-        views.FoodAPIView.as_view(),
-        name='food_rest_api' #4
-    ),
-
+     path('', include(router.urls)),
+     path(
+          'foods/', #3
+          views.FoodAPIView.as_view(),
+          name='food_rest_api' #4
+          ),
 ]
