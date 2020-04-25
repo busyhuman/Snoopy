@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/border2">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회원가입"
+                android:textSize="25dp"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editText1"
+                android:hint="아이디"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:textSize="15dp"/>
+
+            <Button
+                android:id="@+id/bt1"
+                android:layout_gravity="center"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:text="중복확인"
+                android:textSize="15dp"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText2"
+            android:hint="비밀번호"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/editText3"
+            android:hint="비밀번호 확인"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:textSize="15dp"/>
+
+        <EditText
+            android:id="@+id/editText4"
+            android:hint="이름"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:textSize="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="성별"
+                android:layout_margin="5dp"
+                android:textSize="25dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/radioGr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:button="@drawable/radio_m"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/radio_wm"
+                        />
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText5"
+            android:hint="생년월일(6자)"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:textSize="15dp"
+            android:inputType="number"
+            android:maxLength="6"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editText6"
+                android:hint="키"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:textSize="15dp"
+                android:inputType="number"
+                android:maxLength="3"/>
+
+            <EditText
+                android:id="@+id/editText7"
+                android:hint="몸무게"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="24dp"
+                android:textSize="15dp"
+                android:inputType="number"
+                android:maxLength="3"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="활동지수"
+                android:textSize="25dp"/>
+
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/img"
+                android:background="@drawable/i"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"/>
+
+            <Spinner
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner"
+                android:textSize="25dp"
+                android:layout_marginLeft="80dp">
+            </Spinner>
+        </LinearLayout>
+        <Button
+            android:id="@+id/bt2"
+            android:text="회원가입 완료"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/buttonshape"
+            />
+    </LinearLayout>
+</ScrollView>
