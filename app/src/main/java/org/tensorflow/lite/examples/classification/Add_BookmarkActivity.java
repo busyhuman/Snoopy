@@ -2,6 +2,7 @@ package org.tensorflow.lite.examples.classification;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Add_BookmarkActivity extends AppCompatActivity {
 
     String c_FoodName1, c_FoodName2, c_FoodName3;
+    int foodNum;
 
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -25,7 +27,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
         Button bt1 = (Button) findViewById(R.id.detail_btn) ;
         ImageView back = (ImageView) findViewById(R.id.back);
-        TextView add = (TextView) findViewById(R.id.add);
+
 
         TabHost tabHost = (TabHost)findViewById(R.id.host);
         tabHost.setup();
@@ -34,6 +36,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         c_FoodName1 = intent.getStringExtra("FoodName1");
         c_FoodName2 = intent.getStringExtra("FoodName2");
         c_FoodName3 = intent.getStringExtra("FoodName3");
+        foodNum = intent.getIntExtra("foodNum", 0);
 
         TabHost.TabSpec tabSpecDog = tabHost.newTabSpec("Dog").setIndicator("검색");
         tabSpecDog.setContent(R.id.search);
@@ -50,13 +53,21 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
         ListView list = (ListView) findViewById(R.id.list1);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,  android.R.layout.simple_list_item_multiple_choice, mid);
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,  android.R.layout.simple_list_item_1, mid);
         list.setAdapter(adapter);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getApplicationContext(), mid[arg2], Toast.LENGTH_SHORT).show();
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String txtStr = mid[i];
+                    Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
+                    intent.putExtra("FoodName1", c_FoodName1);
+                    intent.putExtra("FoodName2", c_FoodName2);
+                    intent.putExtra("FoodName3", c_FoodName3);
+                    intent.putExtra("foodNum", foodNum);
+                    intent.putExtra("txtStr", txtStr);
+                    startActivity(intent);
+
             }
         });
 
@@ -64,13 +75,21 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
         ListView list1 = (ListView) findViewById(R.id.list2);
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,  android.R.layout.simple_list_item_multiple_choice, mid2);
-        list1.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,  android.R.layout.simple_list_item_1, mid2);
         list1.setAdapter(adapter1);
 
-        list1.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                Toast.makeText(getApplicationContext(), mid2[arg2], Toast.LENGTH_SHORT).show();
+        list1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String txtStr = mid2[i];
+                Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
+                intent.putExtra("FoodName1", c_FoodName1);
+                intent.putExtra("FoodName2", c_FoodName2);
+                intent.putExtra("FoodName3", c_FoodName3);
+                intent.putExtra("foodNum", foodNum);
+                intent.putExtra("txtStr", txtStr);
+                startActivity(intent);
+
             }
         });
 
@@ -88,17 +107,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
-                intent.putExtra("FoodName1", c_FoodName1);
-                intent.putExtra("FoodName2", c_FoodName2);
-                intent.putExtra("FoodName3", c_FoodName3);
-                startActivity(intent);
             }
         });
     }

@@ -59,11 +59,36 @@
                 android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:layout_marginLeft="15dp"/>
+
+            <TextView
+                android:id="@+id/txtfood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="50dp"/>
         </androidx.appcompat.widget.Toolbar>
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        >
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/nextbt"
+            android:layout_marginBottom="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tfl2_logo" />
+    </LinearLayout>
+
     <include
         android:id="@+id/bottom_sheet_layout"
-        layout="@layout/tfe_ic_layout_bottom_sheet" />
+        layout="@layout/tfe_ic_layout_bottom_sheet"
+        android:visibility="invisible" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

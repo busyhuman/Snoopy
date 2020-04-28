@@ -23,7 +23,6 @@
             android:background="@drawable/border2">
 
             <ImageView
-                android:layout_weight="1"
                 android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -31,21 +30,11 @@
                 android:layout_gravity="center"/>
 
             <TextView
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="뒤로가기"
                 android:textSize="25dp"/>
 
-            <TextView
-                android:id="@+id/add"
-                android:layout_weight="6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="추가"
-                android:textSize="25dp"
-                android:layout_marginRight="20dp"/>
 
         </LinearLayout>
 

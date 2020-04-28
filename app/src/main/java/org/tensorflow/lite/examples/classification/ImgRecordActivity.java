@@ -30,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ImgRecordActivity extends AppCompatActivity {
 
     String FoodName1, FoodName2, FoodName3;
+    int foodNum;
+
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.img_record);
@@ -38,12 +40,14 @@ public class ImgRecordActivity extends AppCompatActivity {
         FoodName1 = intent.getStringExtra("FoodName1");
         FoodName2 = intent.getStringExtra("FoodName2");
         FoodName3 = intent.getStringExtra("FoodName3");
+        foodNum = intent.getIntExtra("foodNum", 0);
 
         final Button endbtn;
         final TextView txtname1, txtname2, txtname3;
         final TextView txtfdcal1,txtfdcal2,txtfdcal3;
         final TextView totalCal;
         final LinearLayout fdl1, fdl2, fdl3;
+
 
         ImageView back = (ImageView) findViewById(R.id.back);
 
@@ -68,6 +72,8 @@ public class ImgRecordActivity extends AppCompatActivity {
 
 
 
+
+
         fdl1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +81,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 intent.putExtra("FoodName1", FoodName1);
                 intent.putExtra("FoodName2", FoodName2);
                 intent.putExtra("FoodName3", FoodName3);
+                intent.putExtra("foodNum", 1);
                 startActivity(intent);
             }
         });
@@ -82,6 +89,10 @@ public class ImgRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
+                intent.putExtra("FoodName1", FoodName1);
+                intent.putExtra("FoodName2", FoodName2);
+                intent.putExtra("FoodName3", FoodName3);
+                intent.putExtra("foodNum", 2);
                 startActivity(intent);
             }
         });
@@ -89,6 +100,10 @@ public class ImgRecordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
+                intent.putExtra("FoodName1", FoodName1);
+                intent.putExtra("FoodName2", FoodName2);
+                intent.putExtra("FoodName3", FoodName3);
+                intent.putExtra("foodNum", 3);
                 startActivity(intent);
             }
         });
