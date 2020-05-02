@@ -120,13 +120,17 @@ public abstract class CameraActivity extends AppCompatActivity
   private Model model = Model.FLOAT_EFFICIENTNET;
   private Device device = Device.CPU;
   private int numThreads = -1;
-  String save;
+  String ID, eatTime;
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     LOGGER.d("onCreate " + this);
     super.onCreate(null);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+    Intent intent = getIntent();
+    ID = intent.getStringExtra("ID");
+    eatTime = intent.getStringExtra("eatTime");
 
     setContentView(R.layout.tfe_ic_activity_camera);
 
@@ -221,14 +225,23 @@ public abstract class CameraActivity extends AppCompatActivity
 
     ImageView nextbt = (ImageView) findViewById(R.id.nextbt);
 
+
+
     nextbt.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
 
+        String[] FoodName = new String[3];
+
+        FoodName[0] = recognitionTextView.getText().toString();
+
         Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
-        intent.putExtra("FoodName1", recognitionTextView.getText());
-        intent.putExtra("FoodName2", "음식 없음");
-        intent.putExtra("FoodName3", "음식 없음");
+        for(int i = 1; i<3; i++){
+          FoodName[i] = "음식 없음";
+        }
+        intent.putExtra("FoodName", FoodName);
+        intent.putExtra("ID", ID);
+        intent.putExtra("eatTime", eatTime);
         startActivity(intent);
       }
     });

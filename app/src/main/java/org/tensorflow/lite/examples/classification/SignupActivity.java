@@ -200,7 +200,7 @@ public class SignupActivity extends AppCompatActivity {
                     public void run() {
                         try{
                             float kcal = ((Float.parseFloat(hei) - 100.0f ) * 0.9f) * Float.parseFloat(act);
-                            String post = "ID="+id+"&PW="+pw+"&UserName="+URLEncoder.encode(name, "UTF-8")+"&Age="+age+"&Sex="+sex+"&Height="+hei+"&Weight="+wei+"&Activity_Index="+act + "&UserKcal="+String.valueOf(kcal);
+                            String post = "ID="+id+"&PW="+pw+"&UserName="+URLEncoder.encode(name, "UTF-8")+"&Age="+age+"&Sex="+URLEncoder.encode(sex, "UTF-8")+"&Height="+hei+"&Weight="+wei+"&ActivityIndex="+act + "&UserKcal="+String.valueOf(kcal);
                             System.out.println(SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json",
                                     "POST", post));
                         }catch (UnsupportedEncodingException e){

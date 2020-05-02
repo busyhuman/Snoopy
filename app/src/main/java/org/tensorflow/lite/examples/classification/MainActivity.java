@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     String j_id, j_pw;
     TextView err;
 
+    JSONArray jarray;
+    JSONObject jsonObj;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
         logbt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,25 +73,26 @@ public class MainActivity extends AppCompatActivity {
                                 "GET", null);
                         System.out.println(str);
                         mHandler.postDelayed(new Runnable() { public void run() {
-                            try {
-                                JSONArray jarray = new JSONArray(str); // JSONArray 생성
-                                JSONObject jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
-                                j_id = jsonObj.getString("ID");
-                                j_pw = jsonObj.getString("PW");
-                                System.out.println(j_id  + " " + j_pw);
+                             if(id_str.equals("") || pw_str.equals("")){err.setVisibility(View.VISIBLE);}
+                              else if(str.equals("[] ")){err.setVisibility(View.VISIBLE);}
+                             else if(!str.equals("")) {
+                                 try {
+                                     jarray = new JSONArray(str); // JSONArray 생성
+                                     jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
+                                     j_id = jsonObj.getString("ID");
+                                     j_pw = jsonObj.getString("PW");
+                                     System.out.println(j_id + " " + j_pw);
 
-                                if(id_str.equals(j_id) && pw_str.equals(j_pw))
-                                {
-                                    Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
-                                    intent.putExtra("ID", j_id);
-                                    startActivity(intent);
-                                } else {
-                                    err.setVisibility(View.VISIBLE);
-                                }
+                                     Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
+                                     intent.putExtra("ID", j_id);
+                                     startActivity(intent);
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+
+                                 } catch (JSONException e) {
+                                     e.printStackTrace();
+                                 }
+                             }
+
                         }
                         },0);
                     }

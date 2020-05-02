@@ -32,12 +32,16 @@ public class Main_StatsActivity extends AppCompatActivity {
     SimpleDateFormat format, format_char;
     String nowtime;
     BarChart barchart;
+    String ID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_stats);
+
+        Intent intent = getIntent();
+        ID = intent.getStringExtra("ID");
 
         TextView txtcal = (TextView) findViewById(R.id.txtCalendar);
         Button bt1 = (Button) findViewById(R.id.bt1) ;
@@ -129,6 +133,8 @@ public class Main_StatsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
+                intent.putExtra("eatTime", "아침");
+                intent.putExtra("ID", ID);
                 startActivity(intent);
             }
         });
@@ -137,6 +143,8 @@ public class Main_StatsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
+                intent.putExtra("eatTime", "점심");
+                intent.putExtra("ID", ID);
                 startActivity(intent);
             }
         });
@@ -145,6 +153,8 @@ public class Main_StatsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
+                intent.putExtra("eatTime", "저녁");
+                intent.putExtra("ID", ID);
                 startActivity(intent);
             }
         });

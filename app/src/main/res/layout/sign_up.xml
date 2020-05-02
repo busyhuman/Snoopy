@@ -64,6 +64,7 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:hint="비밀번호"
+            android:inputType="textPassword"
             android:textSize="15dp" />
 
         <EditText
@@ -72,6 +73,7 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:hint="비밀번호 확인"
+            android:inputType="textPassword"
             android:textSize="15dp" />
 
         <EditText
@@ -111,10 +113,9 @@
                         android:id="@+id/m"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginRight="1dp"
                         android:button="@drawable/radio_m"
                         android:text="M"
+                        android:textSize="1dp"
                         android:textColor="@color/main" />
 
                     <RadioButton
@@ -123,6 +124,7 @@
                         android:layout_height="wrap_content"
                         android:button="@drawable/radio_wm"
                         android:text="W"
+                        android:textSize="1dp"
                         android:textColor="@color/main" />
                 </RadioGroup>
             </LinearLayout>
@@ -133,7 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:hint="생년월일(6자)"
+            android:hint="나이"
             android:inputType="number"
             android:maxLength="6"
             android:textSize="15dp" />

@@ -26,10 +26,9 @@
                 android:layout_gravity="center"/>
 
             <TextView
-                android:id="@+id/tb"
+                android:id="@+id/eatTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="아침"
                 android:textSize="25dp"
                 android:layout_marginLeft="10dp"/>
 
@@ -88,7 +87,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="───────────────────────"
+                android:text="─────────────────"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
             <LinearLayout

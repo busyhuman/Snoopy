@@ -18,7 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Add_BookmarkActivity extends AppCompatActivity {
 
-    String c_FoodName1, c_FoodName2, c_FoodName3;
+    String[] c_FoodName = new String[3];
+    String ID;
     int foodNum;
 
     protected void onCreate(@Nullable Bundle savedInstanceState){
@@ -33,9 +34,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         tabHost.setup();
 
         Intent intent = getIntent();
-        c_FoodName1 = intent.getStringExtra("FoodName1");
-        c_FoodName2 = intent.getStringExtra("FoodName2");
-        c_FoodName3 = intent.getStringExtra("FoodName3");
+        c_FoodName = intent.getStringArrayExtra("FoodName");
         foodNum = intent.getIntExtra("foodNum", 0);
 
         TabHost.TabSpec tabSpecDog = tabHost.newTabSpec("Dog").setIndicator("검색");
@@ -49,7 +48,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
         tabHost.setCurrentTab(0);
 
-        final String[] mid = {"밥", "김", "물", "김치", "라면"};
+        final String[] mid = {"밥", "김", "물", "배추김치", "라면"};
 
         ListView list = (ListView) findViewById(R.id.list1);
 
@@ -61,9 +60,8 @@ public class Add_BookmarkActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     String txtStr = mid[i];
                     Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
-                    intent.putExtra("FoodName1", c_FoodName1);
-                    intent.putExtra("FoodName2", c_FoodName2);
-                    intent.putExtra("FoodName3", c_FoodName3);
+                    intent.putExtra("FoodName", c_FoodName);
+                    intent.putExtra("ID", ID);
                     intent.putExtra("foodNum", foodNum);
                     intent.putExtra("txtStr", txtStr);
                     startActivity(intent);
@@ -71,7 +69,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
             }
         });
 
-        final String[] mid2 = {"밥", "김치", "라면"};
+        final String[] mid2 = {"밥", "배추김치", "라면"};
 
         ListView list1 = (ListView) findViewById(R.id.list2);
 
@@ -83,9 +81,8 @@ public class Add_BookmarkActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String txtStr = mid2[i];
                 Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
-                intent.putExtra("FoodName1", c_FoodName1);
-                intent.putExtra("FoodName2", c_FoodName2);
-                intent.putExtra("FoodName3", c_FoodName3);
+                intent.putExtra("FoodName", c_FoodName);
+                intent.putExtra("ID", ID);
                 intent.putExtra("foodNum", foodNum);
                 intent.putExtra("txtStr", txtStr);
                 startActivity(intent);

@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SignupendActivity extends AppCompatActivity {
 
-    String t_name, t_kcal, id;
+    String t_name, t_kcal, ID;
     TextView name, kcal;
 
 
@@ -33,7 +33,7 @@ public class SignupendActivity extends AppCompatActivity {
         Button bt = (Button) findViewById(R.id.bt1);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("ID");
+        ID = intent.getStringExtra("ID");
 
         Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -42,7 +42,7 @@ public class SignupendActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    String str = SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json&ID="+id,
+                    String str = SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json&ID="+ ID,
                             "GET", null);
                     System.out.println(str);
                     mHandler.postDelayed(new Runnable() { public void run() {
