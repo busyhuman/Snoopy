@@ -8,6 +8,6 @@
 /build
 /captures
 .externalNativeBuild
-.README
+.MD
 /.gradle/
 /.idea/

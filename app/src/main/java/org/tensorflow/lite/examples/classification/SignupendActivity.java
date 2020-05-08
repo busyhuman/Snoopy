@@ -42,7 +42,7 @@ public class SignupendActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    String str = SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json&ID="+ ID,
+                    String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID="+ ID,
                             "GET", null);
                     System.out.println(str);
                     mHandler.postDelayed(new Runnable() { public void run() {

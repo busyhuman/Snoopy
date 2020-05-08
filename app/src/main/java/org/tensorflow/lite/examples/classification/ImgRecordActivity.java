@@ -34,10 +34,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
@@ -47,15 +49,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ImgRecordActivity extends AppCompatActivity {
 
-    String ID, eatTime, Query;
+    String ID, Query, nowtime;
     String[] FoodName, c_fn = new String[3];
+    int[] stat_ID = new int[4];
     float[] f_kcal = new float[3];
-    int foodNum, totalKcal;
+    float[] carbo = new float[3];
+    float[] pro = new float[3];
+    float[] fat = new float[3];
+    float[] Na = new float[3];
+    int[] f_ID= new int[3];
+    int foodNum, totalKcal, eatTime;
+    float total_kcal, total_car, total_pro, total_fat, total_na;
     TextView t_eatTime;
     TextView txtfdcal1,txtfdcal2,txtfdcal3;
     myDBHelper myHelper;
     SQLiteDatabase sqlDB;
     Cursor cursor;
+    JSONArray jarray;
+    JSONObject jsonObj;
+    String str, str1;
+
 
 
     protected void onCreate(@Nullable Bundle savedInstanceState){
@@ -67,15 +80,19 @@ public class ImgRecordActivity extends AppCompatActivity {
         FoodName = intent.getStringArrayExtra("FoodName");
         foodNum = intent.getIntExtra("foodNum", 0);
         ID = intent.getStringExtra("ID");
-        eatTime = intent.getStringExtra("eatTime");
+        eatTime = intent.getIntExtra("eatTime",0);
+        nowtime = intent.getStringExtra("DATE");
 
         final Button endbtn;
         final TextView txtname1, txtname2, txtname3;
         final TextView totalCal;
         final LinearLayout fdl1, fdl2, fdl3;
+
         t_eatTime = (TextView) findViewById(R.id.eatTime);
 
-        t_eatTime.setText(eatTime);
+        if(eatTime==0){t_eatTime.setText("아침");}
+        else if(eatTime==1){t_eatTime.setText("점심");}
+        else if(eatTime==2){t_eatTime.setText("저녁");}
 
 
         ImageView back = (ImageView) findViewById(R.id.back);
@@ -99,25 +116,40 @@ public class ImgRecordActivity extends AppCompatActivity {
         txtname3.setText(FoodName[2]);
 
 
-
-            Query = "SELECT Kcal, FoodName FROM foods WHERE FoodName='"+ FoodName[0] +"'";
+            for(int i=0; i<3; i++) {
+            Query = "SELECT Num, FoodName, Kcal, Carbo, Protein, Fat, Natrium FROM foods WHERE FoodName='"+ FoodName[i] +"'";
             myHelper = new myDBHelper(this);
             sqlDB = myHelper.getReadableDatabase();
             cursor = sqlDB.rawQuery(Query, null);
 
             while(cursor.moveToNext()){
-                c_fn[0]  = cursor.getString(1);
-                f_kcal[0] = cursor.getFloat(0);
+                f_ID[i] = cursor.getInt(0);
+                c_fn[i]  = cursor.getString(1);
+                f_kcal[i] = cursor.getFloat(2);
+                carbo[i] = cursor.getFloat(3);
+                pro[i] = cursor.getFloat(4);
+                fat[i] = cursor.getFloat(5);
+                Na[i] = cursor.getFloat(6);
             }
-            System.out.println(c_fn[0]+ " " + f_kcal[0]);
+            System.out.println(c_fn[i]+ " " + f_kcal[i]);
 
              sqlDB.close();
              cursor.close();
-
+            }
 
         txtfdcal1.setText(String.valueOf(f_kcal[0]));
         txtfdcal2.setText(String.valueOf(f_kcal[1]));
         txtfdcal3.setText(String.valueOf(f_kcal[2]));
+
+        total_kcal = f_kcal[0]+f_kcal[1]+f_kcal[2];
+        total_car = carbo[0]+carbo[1]+carbo[2];
+        total_pro = pro[0]+pro[1]+pro[2];
+        total_fat = fat[0]+fat[1]+fat[2];
+        total_na = Na[0]+Na[1]+Na[2];
+
+
+
+
 
         fdl1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +157,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("f_kcal", f_kcal);
+                intent.putExtra("DATE", nowtime);
                 intent.putExtra("ID", ID);
                 intent.putExtra("foodNum", 1);
                 startActivity(intent);
@@ -136,6 +169,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("ID", ID);
+                intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", 2);
                 startActivity(intent);
             }
@@ -146,6 +180,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("ID", ID);
+                intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", 3);
                 startActivity(intent);
             }
@@ -156,10 +191,83 @@ public class ImgRecordActivity extends AppCompatActivity {
         endbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                Handler mHandler = new Handler(Looper.getMainLooper());
+
+                class NewRunnable implements Runnable {
+
+
+                    @Override
+                    public void run() {
+                        str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&user=" + ID + "&Date=" + nowtime + "&Timeslot=" + String.valueOf(eatTime),
+                                "GET", null);
+                        System.out.println("검색: " + str);
+
+                        mHandler.postDelayed(new Runnable() {
+                            public void run() {
+                                if (!str.equals("[] ")) {
+                                    try {
+                                        jarray = new JSONArray(str); // JSONArray 생성
+                                        for (int i = 1; i < 4; i++) {
+                                            jsonObj = jarray.getJSONObject(i-1);  // JSONObject 추출
+                                            stat_ID[i] = jsonObj.getInt("StatsID");
+                                            System.out.println("sID: " + stat_ID[i]);
+                                        }
+                                        jsonObj = jarray.getJSONObject(0);
+                                        stat_ID[0] = jsonObj.getInt("StatsID");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                System.out.println("검색 완료");
+                            }
+                        }, 0);
+                    }
+                }
+
+                NewRunnable nr = new NewRunnable();
+                Thread t = new Thread(nr);
+                t.start();
+
+                class del_Runnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 4; i++) {
+                            System.out.println("삭제 sID: " + stat_ID[i]);
+                            System.out.println("삭제" + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/" + String.valueOf(stat_ID[i]) + "/", "DELETE", null));
+                        }
+                        System.out.println("삭제 완료");
+                    }
+                }
+
+                del_Runnable dnr = new del_Runnable();
+                Thread td = new Thread(dnr);
+                td.start();
+
+
+                class add_Runnable implements Runnable {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 3; i++) {
+                            String post = "Date=" + nowtime + "&Kcal=" + String.valueOf(f_kcal[i]) + "&Carbo=" + String.valueOf(carbo[i]) + "&Protein=" + String.valueOf(pro[i]) + "&Fat=" + String.valueOf(fat[i]) + "&Natrium=" + String.valueOf(Na[i]) + "&Timeslot=" + String.valueOf(eatTime) + "&user=" + ID;
+                            System.out.println("삽입: " + SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/stats/?format=json",
+                                    "POST", post));
+                        }
+                        System.out.println("삽입 완료");
+                    }
+                }
+
+                add_Runnable anr = new add_Runnable();
+                Thread ta = new Thread(anr);
+                ta.start();
+
+
                 Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
                 intent.putExtra("ID", ID);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "음식 기록 완료!", Toast.LENGTH_LONG).show();
+
             }
         });
 

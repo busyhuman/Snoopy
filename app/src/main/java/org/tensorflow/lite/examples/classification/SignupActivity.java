@@ -102,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                         id = edtID.getText().toString();
 
                         if(!id.equals("")){
-                            String str = SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id,
+                            String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id,
                                     "GET", null);
                             System.out.println(str);
                             try {

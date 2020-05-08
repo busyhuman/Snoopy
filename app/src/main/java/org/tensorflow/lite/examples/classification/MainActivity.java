@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.classification;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,7 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.lite.examples.classification.SnoopyConnection.SnoopyHttpConnection;
-
+import org.tensorflow.lite.examples.classification.DAO;
 public class MainActivity extends AppCompatActivity {
 
     Button logbt, signbt;
@@ -57,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        myDBHelper dbHelper = new myDBHelper(this);
+
         logbt.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
 
@@ -65,18 +71,20 @@ public class MainActivity extends AppCompatActivity {
 
                 id_str = id.getText().toString();
                 pw_str = pw.getText().toString();
+         //       DAO.myDB = dbHelper.getWritableDatabase();
+         //       dbHelper.onCreate(DAO.myDB);
 
                 class NewRunnable implements Runnable {
                     @Override
                     public void run() {
-                        String str = SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id_str,
+                        String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id_str,
                                 "GET", null);
-                        System.out.println(str);
                         mHandler.postDelayed(new Runnable() { public void run() {
                              if(id_str.equals("") || pw_str.equals("")){err.setVisibility(View.VISIBLE);}
                               else if(str.equals("[] ")){err.setVisibility(View.VISIBLE);}
                              else if(!str.equals("")) {
                                  try {
+
                                      jarray = new JSONArray(str); // JSONArray 생성
                                      jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                                      j_id = jsonObj.getString("ID");

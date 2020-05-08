@@ -120,7 +120,8 @@ public abstract class CameraActivity extends AppCompatActivity
   private Model model = Model.FLOAT_EFFICIENTNET;
   private Device device = Device.CPU;
   private int numThreads = -1;
-  String ID, eatTime;
+  String ID, nowtime;
+  int eatTime;
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -130,7 +131,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
     Intent intent = getIntent();
     ID = intent.getStringExtra("ID");
-    eatTime = intent.getStringExtra("eatTime");
+    nowtime = intent.getStringExtra("DATE");
+    eatTime = intent.getIntExtra("eatTime", 0);
 
     setContentView(R.layout.tfe_ic_activity_camera);
 
@@ -241,6 +243,7 @@ public abstract class CameraActivity extends AppCompatActivity
         }
         intent.putExtra("FoodName", FoodName);
         intent.putExtra("ID", ID);
+        intent.putExtra("DATE", nowtime);
         intent.putExtra("eatTime", eatTime);
         startActivity(intent);
       }
