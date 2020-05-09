@@ -113,9 +113,10 @@
                             android:layout_marginBottom="5dp">
 
                             <ProgressBar
+                                android:layout_weight="10"
                                 android:layout_gravity="center"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="280dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/red"
@@ -125,9 +126,10 @@
                                 android:scaleY="2"/>
 
                             <TextView
+                                android:layout_weight="1"
                                 android:id="@+id/txtCarboPercent"
                                 android:layout_width="wrap_content"
-                                android:layout_height="32dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="15dp"
                                 android:text="89%"
                                 android:textSize="15dp" />
@@ -141,8 +143,9 @@
 
                             <ProgressBar
                                 android:layout_gravity="center"
+                                android:layout_weight="10"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="280dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/green"
@@ -152,9 +155,10 @@
                                 android:scaleY="2"/>
 
                             <TextView
+                                android:layout_weight="1"
                                 android:id="@+id/txtProteinPercent"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_marginLeft="15dp"
                                 android:text="3%"
                                 android:textSize="15dp" />
@@ -163,12 +167,14 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="10dp">
 
                             <ProgressBar
+                                android:layout_weight="10"
                                 android:layout_gravity="center"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="280dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/orange"
@@ -178,6 +184,7 @@
                                 android:scaleY="2"/>
 
                             <TextView
+                                android:layout_weight="1"
                                 android:layout_marginLeft="15dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -241,36 +248,86 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="6"
                             android:orientation="horizontal">
-
-                            <Button
+                            <LinearLayout
                                 android:id="@+id/bt1"
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
+                                android:orientation="vertical"
                                 android:layout_margin="20dp"
                                 android:layout_weight="1"
-                                android:background="#FFFFFF"
-                                android:text="아침"
-                                android:textSize="30dp" />
+                                android:background="#FFFFFF">
 
-                            <Button
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:background="#FFFFFF"
+                                    android:text="아침"
+                                    android:textSize="30dp" />
+                                <TextView
+                                    android:id="@+id/timekcal1"
+                                    android:layout_gravity="center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text = "0kcal"
+                                    android:textSize="15dp"/>
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
                                 android:id="@+id/bt2"
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
+                                android:orientation="vertical"
                                 android:layout_margin="20dp"
                                 android:layout_weight="1"
-                                android:background="#FFFFFF"
-                                android:text="점심"
-                                android:textSize="30dp" />
+                                android:background="#FFFFFF">
 
-                            <Button
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:background="#FFFFFF"
+                                    android:text="점심"
+                                    android:textSize="30dp" />
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text = "0kcal"
+                                    android:id="@+id/timekcal2"
+                                    android:textSize="15dp"/>
+
+                            </LinearLayout>
+                            <LinearLayout
                                 android:id="@+id/bt3"
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
+                                android:orientation="vertical"
                                 android:layout_margin="20dp"
                                 android:layout_weight="1"
-                                android:background="#FFFFFF"
-                                android:text="저녁"
-                                android:textSize="30dp" />
+                                android:background="#FFFFFF">
+
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="20dp"
+                                    android:background="#FFFFFF"
+                                    android:text="저녁"
+                                    android:textSize="30dp" />
+                                <TextView
+                                    android:layout_gravity="center"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text = "0kcal"
+                                    android:id="@+id/timekcal3"
+                                    android:textSize="15dp"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -288,10 +345,12 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             >
+
                             <ImageView
+                                android:id="@+id/imgCar1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/green"/>
+                                android:src="@drawable/orange" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -305,8 +364,7 @@
                                 android:textSize="20dp"
                                 android:layout_marginRight="10dp"
                                 android:gravity="right"
-                                android:id="@+id/txtTotalCarbo"
-                                android:text="196g/350g" />
+                                android:id="@+id/txtTotalCarbo" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -315,9 +373,10 @@
                             android:orientation="horizontal"
                             >
                             <ImageView
+                                android:id="@+id/imgPro1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/green"/>
+                                android:src="@drawable/orange"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -331,8 +390,7 @@
                                 android:textSize="20dp"
                                 android:layout_marginRight="10dp"
                                 android:gravity="right"
-                                android:id="@+id/txtTotalProtein"
-                                android:text="60g/120g" />
+                                android:id="@+id/txtTotalProtein" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -341,6 +399,7 @@
                             android:orientation="horizontal"
                             >
                             <ImageView
+                                android:id="@+id/imgFat1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/orange"/>
@@ -357,8 +416,7 @@
                                 android:textSize="20dp"
                                 android:layout_marginRight="10dp"
                                 android:gravity="right"
-                                android:id="@+id/txtTotalFat"
-                                android:text="10g/65g" />
+                                android:id="@+id/txtTotalFat" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -422,14 +480,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginBottom="15dp">
-                        <Spinner
-                            android:layout_marginStart="20dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/spin"
-                            android:textSize="10dp"
-                            android:layout_marginLeft="10dp">
-                        </Spinner>
+
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
@@ -461,6 +512,7 @@
                                 android:text="아침"
                                 />
                             <TextView
+                                android:id="@+id/txteat1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
@@ -481,6 +533,7 @@
                                 android:text="점심"
                                 />
                             <TextView
+                                android:id="@+id/txteat2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
@@ -501,6 +554,7 @@
                                 android:text="저녁"
                                 />
                             <TextView
+                                android:id="@+id/txteat3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="13dp"
@@ -511,11 +565,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="vertical" >
+
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -533,22 +587,26 @@
                             android:layout_marginBottom="5dp">
 
                             <ProgressBar
+                                android:layout_weight="10"
                                 android:layout_gravity="center"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="280dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/red"
                                 android:max="100"
+                                android:id="@+id/pbCarboPro"
                                 android:progress="89"
                                 android:scaleY="2"/>
 
                             <TextView
-                                android:layout_marginLeft="15dp"
+                                android:layout_weight="1"
+                                android:id="@+id/txtCarbo1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="15dp"
-                                android:text="89%"/>
+                                android:layout_marginLeft="15dp"
+                                android:text="89%"
+                                android:textSize="15dp" />
 
                         </LinearLayout>
                         <LinearLayout
@@ -559,44 +617,53 @@
 
                             <ProgressBar
                                 android:layout_gravity="center"
+                                android:layout_weight="10"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="280dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/green"
                                 android:max="100"
                                 android:progress="3"
+                                android:id="@+id/pbProtenPro"
                                 android:scaleY="2"/>
 
                             <TextView
-                                android:layout_marginLeft="15dp"
+                                android:layout_weight="1"
+                                android:id="@+id/txtProtein1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="15dp"
-                                android:text="3%"/>
+                                android:layout_marginLeft="15dp"
+                                android:text="3%"
+                                android:textSize="15dp" />
 
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="10dp">
 
                             <ProgressBar
+                                android:layout_weight="10"
                                 android:layout_gravity="center"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="280dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/orange"
                                 android:max="100"
                                 android:progress="8"
+                                android:id="@+id/pbFatPro"
                                 android:scaleY="2"/>
 
                             <TextView
+                                android:layout_weight="1"
                                 android:layout_marginLeft="15dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
+                                android:id="@+id/txtFat1"
                                 android:text="8%"/>
 
                         </LinearLayout>
@@ -605,7 +672,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center"
-                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="30dp">
 
                             <ImageView
@@ -657,9 +723,10 @@
                             android:orientation="horizontal"
                             >
                             <ImageView
+                                android:id="@+id/imgCar2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/green"/>
+                                android:src="@drawable/orange"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -683,9 +750,10 @@
                             android:orientation="horizontal"
                             >
                             <ImageView
+                                android:id="@+id/imgPro2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/green"/>
+                                android:src="@drawable/orange"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -700,7 +768,7 @@
                                 android:layout_marginRight="10dp"
                                 android:gravity="right"
                                 android:id="@+id/txtProtein"
-                                android:text="60g/120g" />
+                                />
                         </LinearLayout>
 
                         <LinearLayout
@@ -709,6 +777,7 @@
                             android:orientation="horizontal"
                             >
                             <ImageView
+                                android:id="@+id/imgFat2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/orange"/>
@@ -720,6 +789,7 @@
                                 android:text="지방" />
 
                             <TextView
+                                android:id="@+id/txtFat"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textSize="20dp"

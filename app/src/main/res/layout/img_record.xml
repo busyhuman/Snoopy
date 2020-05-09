@@ -52,7 +52,7 @@
                     android:textSize="20dp"
                     android:textStyle="bold"/>
                 <TextView
-                    android:id="@+id/total"
+                    android:id="@+id/totalkcal"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_width="wrap_content"
@@ -71,10 +71,10 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/datetxt"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="2020. 04. 06"
                 android:textSize="17dp"/>
         </LinearLayout>
 
@@ -100,10 +100,12 @@
 
                 <TextView
                     android:id="@+id/food_name1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:padding="15dp"
                     android:text="음식 없음"
+                    android:ellipsize="end"
+                    android:singleLine = "true"
                     android:textSize="20dp" />
                 <TextView
                     android:layout_gravity="right"
@@ -131,9 +133,11 @@
                 <TextView
                     android:id="@+id/food_name2"
                     android:padding="15dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="음식 없음"
+                    android:ellipsize="end"
+                    android:singleLine = "true"
                     android:textSize="20dp"/>
                 <TextView
                     android:layout_gravity="right"
@@ -160,13 +164,15 @@
                 <TextView
                     android:id="@+id/food_name3"
                     android:padding="15dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="음식 없음"
                     android:textSize="20dp"/>
                 <TextView
                     android:layout_gravity="right"
                     android:padding="15dp"
+                    android:ellipsize="end"
+                    android:singleLine = "true"
                     android:id="@+id/txtkcal3"
                     android:text="0"
                     android:layout_width="wrap_content"

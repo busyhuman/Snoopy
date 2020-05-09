@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
                 id_str = id.getText().toString();
                 pw_str = pw.getText().toString();
-         //       DAO.myDB = dbHelper.getWritableDatabase();
-         //       dbHelper.onCreate(DAO.myDB);
+                //    DAO.myDB = dbHelper.getWritableDatabase();
+                //    dbHelper.onCreate(DAO.myDB);
 
                 class NewRunnable implements Runnable {
                     @Override

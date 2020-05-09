@@ -58,10 +58,11 @@ public class ImgRecordActivity extends AppCompatActivity {
     float[] fat = new float[3];
     float[] Na = new float[3];
     int[] f_ID= new int[3];
-    int foodNum, totalKcal, eatTime;
+    int foodNum, eatTime;
     float total_kcal, total_car, total_pro, total_fat, total_na;
-    TextView t_eatTime;
+    TextView t_eatTime, datetxt;
     TextView txtfdcal1,txtfdcal2,txtfdcal3;
+    TextView totalCal;
     myDBHelper myHelper;
     SQLiteDatabase sqlDB;
     Cursor cursor;
@@ -85,7 +86,6 @@ public class ImgRecordActivity extends AppCompatActivity {
 
         final Button endbtn;
         final TextView txtname1, txtname2, txtname3;
-        final TextView totalCal;
         final LinearLayout fdl1, fdl2, fdl3;
 
         t_eatTime = (TextView) findViewById(R.id.eatTime);
@@ -115,6 +115,10 @@ public class ImgRecordActivity extends AppCompatActivity {
         txtname2.setText(FoodName[1]);
         txtname3.setText(FoodName[2]);
 
+        datetxt = (TextView) findViewById(R.id.datetxt);
+
+        datetxt.setText(nowtime);
+
 
             for(int i=0; i<3; i++) {
             Query = "SELECT Num, FoodName, Kcal, Carbo, Protein, Fat, Natrium FROM foods WHERE FoodName='"+ FoodName[i] +"'";
@@ -142,12 +146,10 @@ public class ImgRecordActivity extends AppCompatActivity {
         txtfdcal3.setText(String.valueOf(f_kcal[2]));
 
         total_kcal = f_kcal[0]+f_kcal[1]+f_kcal[2];
-        total_car = carbo[0]+carbo[1]+carbo[2];
-        total_pro = pro[0]+pro[1]+pro[2];
-        total_fat = fat[0]+fat[1]+fat[2];
-        total_na = Na[0]+Na[1]+Na[2];
 
+        totalCal = (TextView) findViewById(R.id.totalkcal);
 
+        totalCal.setText(String.valueOf(total_kcal));
 
 
 
