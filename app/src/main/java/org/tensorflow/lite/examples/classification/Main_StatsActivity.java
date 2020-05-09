@@ -53,6 +53,8 @@ public class Main_StatsActivity extends AppCompatActivity {
     float[] dateKcal = new float[5];
     String[] stat = new String[5];
 
+    TextView txtMsg;
+
 
     ProgressBar pgbCarbo, pgbProtein, pgbFat, pbCarboPro, pbProtenPro, pbFatPro;
     float totalKcal = 0.0f, userKcal = 0.0f, totalProtein = 0.0f, totalCarbo = 0.0f, totalFat=0.0f, userWei = 0.0f;
@@ -453,13 +455,16 @@ public class Main_StatsActivity extends AppCompatActivity {
 
         renew();
 
+        txtMsg = (TextView) findViewById(R.id.txtMsg);
+
         fd_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "음식 업데이트 중!", Toast.LENGTH_LONG).show();
+
                 myDBHelper dbHelper = new myDBHelper(Main_StatsActivity.this);
                 DAO.myDB = dbHelper.getWritableDatabase();
                 dbHelper.onCreate(DAO.myDB);
+
                 Toast.makeText(getApplicationContext(), "음식 업데이트 완료!", Toast.LENGTH_LONG).show();
             }
         });
@@ -566,4 +571,3 @@ public class Main_StatsActivity extends AppCompatActivity {
         });
     }
 }
-

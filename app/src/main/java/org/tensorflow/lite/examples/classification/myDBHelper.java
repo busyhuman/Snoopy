@@ -1,9 +1,13 @@
 package org.tensorflow.lite.examples.classification;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -15,8 +19,11 @@ import java.net.URLDecoder;
 
 
 public class myDBHelper extends SQLiteOpenHelper {
+    Context con;
     public myDBHelper(Context context) {
+
         super(context, "foods", null, 1);
+        con = context;
     }
 
     @Override
@@ -26,7 +33,9 @@ public class myDBHelper extends SQLiteOpenHelper {
         class NewRunnable implements Runnable {
             @Override
             public void run() {
+
                 String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/foods/?format=json", "GET", null);
+
 
                 try {
                     JSONArray jarray = new JSONArray(str);
@@ -54,6 +63,7 @@ public class myDBHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
+
             }
         }
 
@@ -65,7 +75,7 @@ public class myDBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
+     //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

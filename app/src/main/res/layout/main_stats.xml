@@ -608,7 +608,16 @@
 
                         </LinearLayout>
 
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_gravity="bottom"
+                        android:background="#fffff0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
                         <Button
+                            android:layout_margin="10dp"
                             android:background="@drawable/buttonshape2"
                             android:id="@+id/fd_update1"
                             android:layout_gravity="center"
@@ -617,12 +626,19 @@
                             android:text="음식 업데이트"
                             android:textSize="15dp"/>
 
+                        <TextView
+                            android:id="@+id/txtMsg"
+                            android:textColor="#000000"
+                            android:layout_marginLeft="15dp"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:text="클릭 후, 완료 메시지가\n뜰 때까지 기다려 주세요."/>
+
+
                     </LinearLayout>
-
-
-
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"

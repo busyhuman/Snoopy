@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id_str,
                                 "GET", null);
+
                         mHandler.postDelayed(new Runnable() { public void run() {
                              if(id_str.equals("") || pw_str.equals("")){err.setVisibility(View.VISIBLE);}
                               else if(str.equals("[] ")){err.setVisibility(View.VISIBLE);}
