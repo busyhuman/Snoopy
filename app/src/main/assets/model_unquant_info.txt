@@ -1,3 +1,0 @@
-Model: model_unquant
-Input: input
-Output: MobilenetV1/Predictions/Reshape_1
