@@ -38,6 +38,7 @@
         <receiver android:name=".WidgetActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="org.tensorflow.lite.examples.classification.CLICK" />
             </intent-filter>
 
             <meta-data

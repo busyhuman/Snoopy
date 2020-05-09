@@ -1,6 +1,8 @@
 package org.tensorflow.lite.examples.classification;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,8 +25,15 @@ public class InfoActivity extends AppCompatActivity {
     String[] c_FoodName = new String[3];
     int foodNum, eatTime, fdID, bookbool, booknum;
     String fd_name, ID, nowtime;
+    TextView txtsize, txtkcal, txtcar, txtpro, txtfat, txtNa;
     JSONArray jarray;
     JSONObject jsonObj;
+    myDBHelper myHelper;
+    SQLiteDatabase sqlDB;
+    Cursor cursor;
+
+    int size;
+    float f_kcal,carbo,pro,fat,Na;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -69,6 +78,46 @@ public class InfoActivity extends AppCompatActivity {
 
         if( bookbool == 1) {bookmark.setImageResource(R.drawable.star_on);}
         else if(bookbool == 0) {bookmark.setImageResource(R.drawable.star_off);}
+
+
+
+        String Query = "SELECT ServingSize, Kcal, Carbo, Protein, Fat, Natrium FROM foods WHERE FoodName='"+ fd_name +"'";
+        myHelper = new myDBHelper(this);
+        sqlDB = myHelper.getReadableDatabase();
+        cursor = sqlDB.rawQuery(Query, null);
+
+        while(cursor.moveToNext()){
+            size = cursor.getInt(0);
+            f_kcal = cursor.getFloat(1);
+            carbo = cursor.getFloat(2);
+            pro = cursor.getFloat(3);
+            fat = cursor.getFloat(4);
+            Na = cursor.getFloat(5);
+            System.out.println(size + " " + f_kcal + " " +carbo + " " +pro + " " +fat + " "+Na + " ");
+        }
+
+        sqlDB.close();
+        cursor.close();
+
+        if(carbo==-1) {carbo=0;}
+        if(pro==-1) {pro=0;}
+        if(fat==-1) {fat=0;}
+        if(Na==-1) {Na=0;}
+
+        txtsize = (TextView) findViewById(R.id.txtsize);
+        txtkcal = (TextView) findViewById(R.id.txtkcal);
+        txtcar = (TextView) findViewById(R.id.txtcar);
+        txtpro = (TextView) findViewById(R.id.txtpro);
+        txtfat = (TextView) findViewById(R.id.txtfat);
+        txtNa = (TextView) findViewById(R.id.txtNa);
+
+        txtsize.setText(String.valueOf(size) + "g");
+        txtkcal.setText(String.valueOf(f_kcal) + "kcal");
+        txtcar.setText(String.valueOf(carbo)+"g");
+        txtpro.setText(String.valueOf(pro)+"g");
+        txtfat.setText(String.valueOf(fat)+"g");
+        txtNa.setText(String.valueOf(Na)+"mg");
+
 
 
         Handler mHandler = new Handler(Looper.getMainLooper());

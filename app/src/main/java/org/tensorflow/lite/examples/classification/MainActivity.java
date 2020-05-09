@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     JSONArray jarray;
     JSONObject jsonObj;
 
+
+    static SharedPreferences setting;
+    static SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         id = (EditText) findViewById(R.id.id);
         pw = (EditText) findViewById(R.id.pw);
 
+
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -57,9 +65,24 @@ public class MainActivity extends AppCompatActivity {
                     0);
         }
 
+        setting = getSharedPreferences("setting", 0);
+        editor= setting.edit();
+
+
+        id_str = setting.getString("ID", "");
+        pw_str = setting.getString("PW", "");
+
+        if(!id_str.equals("") && !pw_str.equals("")) {
+            Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
+            intent.putExtra("ID", id_str);
+            startActivity(intent);
+        }
+
+
 
 
         myDBHelper dbHelper = new myDBHelper(this);
+
 
         logbt.setOnClickListener(new View.OnClickListener() {
 
@@ -84,12 +107,16 @@ public class MainActivity extends AppCompatActivity {
                               else if(str.equals("[] ")){err.setVisibility(View.VISIBLE);}
                              else if(!str.equals("")) {
                                  try {
-
                                      jarray = new JSONArray(str); // JSONArray 생성
                                      jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                                      j_id = jsonObj.getString("ID");
                                      j_pw = jsonObj.getString("PW");
                                      System.out.println(j_id + " " + j_pw);
+
+                                     editor.putString("ID", j_id);
+                                     editor.putString("PW", j_pw);
+
+                                     editor.commit();
 
                                      Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
                                      intent.putExtra("ID", j_id);
@@ -113,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
         signbt.setOnClickListener(new View.OnClickListener() {
             @Override

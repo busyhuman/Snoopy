@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,17 +50,22 @@ public class myDBHelper extends SQLiteOpenHelper {
                             continue;
                         }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
         }
-        new Thread(new NewRunnable()).start();
 
+        Thread t = new Thread(new NewRunnable());
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-     //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
+        //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

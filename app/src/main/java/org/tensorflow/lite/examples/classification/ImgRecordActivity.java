@@ -51,7 +51,7 @@ public class ImgRecordActivity extends AppCompatActivity {
 
     String ID, Query, nowtime;
     String[] FoodName, c_fn = new String[3];
-    int[] stat_ID = new int[4];
+    int[] stat_ID = new int[5];
     float[] f_kcal = new float[3];
     float[] carbo = new float[3];
     float[] pro = new float[3];
@@ -151,6 +151,44 @@ public class ImgRecordActivity extends AppCompatActivity {
 
         totalCal.setText(String.valueOf(total_kcal));
 
+        Handler mHandler = new Handler(Looper.getMainLooper());
+
+        class NewRunnable implements Runnable {
+
+
+            @Override
+            public void run() {
+                str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&user=" + ID + "&Date=" + nowtime + "&Timeslot=" + String.valueOf(eatTime),
+                        "GET", null);
+                System.out.println("기록화면 검색: " + str);
+
+                mHandler.postDelayed(new Runnable() {
+                    public void run() {
+                        if (!str.equals("[] ")) {
+                            try {
+                                jarray = new JSONArray(str); // JSONArray 생성
+                                for (int i = 0; i < 3; i++) {
+                                    jsonObj = jarray.getJSONObject(i);  // JSONObject 추출
+                                    stat_ID[i] = jsonObj.getInt("StatsID");
+                                    System.out.println(i+ " sID: " + stat_ID[i]);
+                                }
+                                //jsonObj = jarray.getJSONObject(0);
+                                //stat_ID[0] = jsonObj.getInt("StatsID");
+                                System.out.println("1 sID: " + stat_ID[1]);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        System.out.println("검색 완료");
+                    }
+                }, 0);
+            }
+        }
+
+        NewRunnable nr = new NewRunnable();
+        Thread t = new Thread(nr);
+        t.start();
+
 
 
         fdl1.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +196,7 @@ public class ImgRecordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
+                intent.putExtra("eatTime", eatTime);
                 intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("ID", ID);
@@ -170,8 +209,10 @@ public class ImgRecordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
-                intent.putExtra("ID", ID);
+                intent.putExtra("eatTime", eatTime);
+                intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
+                intent.putExtra("ID", ID);
                 intent.putExtra("foodNum", 2);
                 startActivity(intent);
             }
@@ -181,8 +222,10 @@ public class ImgRecordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
-                intent.putExtra("ID", ID);
+                intent.putExtra("eatTime", eatTime);
+                intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
+                intent.putExtra("ID", ID);
                 intent.putExtra("foodNum", 3);
                 startActivity(intent);
             }
@@ -195,47 +238,11 @@ public class ImgRecordActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Handler mHandler = new Handler(Looper.getMainLooper());
-
-                class NewRunnable implements Runnable {
-
-
-                    @Override
-                    public void run() {
-                        str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&user=" + ID + "&Date=" + nowtime + "&Timeslot=" + String.valueOf(eatTime),
-                                "GET", null);
-                        System.out.println("검색: " + str);
-
-                        mHandler.postDelayed(new Runnable() {
-                            public void run() {
-                                if (!str.equals("[] ")) {
-                                    try {
-                                        jarray = new JSONArray(str); // JSONArray 생성
-                                        for (int i = 1; i < 4; i++) {
-                                            jsonObj = jarray.getJSONObject(i-1);  // JSONObject 추출
-                                            stat_ID[i] = jsonObj.getInt("StatsID");
-                                            System.out.println("sID: " + stat_ID[i]);
-                                        }
-                                        jsonObj = jarray.getJSONObject(0);
-                                        stat_ID[0] = jsonObj.getInt("StatsID");
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                System.out.println("검색 완료");
-                            }
-                        }, 0);
-                    }
-                }
-
-                NewRunnable nr = new NewRunnable();
-                Thread t = new Thread(nr);
-                t.start();
 
                 class del_Runnable implements Runnable {
                     @Override
                     public void run() {
-                        for (int i = 0; i < 4; i++) {
+                        for (int i = 0; i < 3; i++) {
                             System.out.println("삭제 sID: " + stat_ID[i]);
                             System.out.println("삭제" + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/" + String.valueOf(stat_ID[i]) + "/", "DELETE", null));
                         }
@@ -253,13 +260,12 @@ public class ImgRecordActivity extends AppCompatActivity {
                     public void run() {
                         for (int i = 0; i < 3; i++) {
                             String post = "Date=" + nowtime + "&Kcal=" + String.valueOf(f_kcal[i]) + "&Carbo=" + String.valueOf(carbo[i]) + "&Protein=" + String.valueOf(pro[i]) + "&Fat=" + String.valueOf(fat[i]) + "&Natrium=" + String.valueOf(Na[i]) + "&Timeslot=" + String.valueOf(eatTime) + "&user=" + ID;
-                            System.out.println("삽입: " + SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/stats/?format=json",
+                            System.out.println("삽입: " + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json",
                                     "POST", post));
                         }
                         System.out.println("삽입 완료");
                     }
                 }
-
                 add_Runnable anr = new add_Runnable();
                 Thread ta = new Thread(anr);
                 ta.start();
@@ -267,6 +273,7 @@ public class ImgRecordActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
                 intent.putExtra("ID", ID);
+                intent.putExtra("eatTime", eatTime);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "음식 기록 완료!", Toast.LENGTH_LONG).show();
 

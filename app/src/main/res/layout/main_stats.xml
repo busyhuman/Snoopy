@@ -91,6 +91,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -100,7 +101,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="영양분 섭취량"
+                            android:text="영양 섭취 권장 비율"
                             android:textSize="20dp"
                             android:layout_marginLeft="30dp"
                             android:layout_marginBottom="5dp"
@@ -121,17 +122,15 @@
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/red"
                                 android:max="100"
-                                android:id="@+id/pgbCarbo"
-                                android:progress="89"
+                                android:progress="64"
                                 android:scaleY="2"/>
 
                             <TextView
                                 android:layout_weight="1"
-                                android:id="@+id/txtCarboPercent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="15dp"
-                                android:text="89%"
+                                android:text="64%"
                                 android:textSize="15dp" />
 
                         </LinearLayout>
@@ -150,17 +149,15 @@
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/green"
                                 android:max="100"
-                                android:progress="3"
-                                android:id="@+id/pgbProtein"
+                                android:progress="25"
                                 android:scaleY="2"/>
 
                             <TextView
                                 android:layout_weight="1"
-                                android:id="@+id/txtProteinPercent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="15dp"
-                                android:text="3%"
+                                android:text="25%"
                                 android:textSize="15dp" />
 
                         </LinearLayout>
@@ -179,8 +176,7 @@
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/orange"
                                 android:max="100"
-                                android:progress="8"
-                                android:id="@+id/pgbFat"
+                                android:progress="11"
                                 android:scaleY="2"/>
 
                             <TextView
@@ -189,8 +185,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
-                                android:id="@+id/txtFatPercent"
-                                android:text="8%"/>
+                                android:text="11%"/>
 
                         </LinearLayout>
                         <LinearLayout
@@ -232,6 +227,157 @@
                                 android:layout_height="wrap_content"
                                 android:text="지방"
                                 android:textSize="15dp"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="실제 영양 섭취 비율"
+                            android:textSize="20dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                android:id="@+id/pgbCarbo"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="10"
+                                android:max="100"
+                                android:progress="0"
+                                android:progressTint="@color/red"
+                                android:scaleY="2" />
+
+                            <TextView
+                                android:id="@+id/txtCarboPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_weight="1"
+                                android:text="89%"
+                                android:textSize="15dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                android:id="@+id/pgbProtein"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="10"
+                                android:max="100"
+                                android:progress="0"
+                                android:progressTint="@color/green"
+                                android:scaleY="2" />
+
+                            <TextView
+                                android:id="@+id/txtProteinPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_weight="1"
+                                android:text="3%"
+                                android:textSize="15dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <ProgressBar
+                                android:id="@+id/pgbFat"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="10"
+                                android:max="100"
+                                android:progress="0"
+                                android:progressTint="@color/orange"
+                                android:scaleY="2" />
+
+                            <TextView
+                                android:id="@+id/txtFatPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_weight="1"
+                                android:text="8%"
+                                android:textSize="15dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="30dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/red" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="탄수화물"
+                                android:textSize="15dp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:src="@drawable/green" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="단백질"
+                                android:textSize="15dp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:src="@drawable/orange" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="지방"
+                                android:textSize="15dp" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -462,6 +608,15 @@
 
                         </LinearLayout>
 
+                        <Button
+                            android:background="@drawable/buttonshape2"
+                            android:id="@+id/fd_update1"
+                            android:layout_gravity="center"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="음식 업데이트"
+                            android:textSize="15dp"/>
+
                     </LinearLayout>
 
 
@@ -565,6 +720,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -574,7 +730,145 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="영양분 섭취량"
+                            android:text="영양 섭취 권장 비율"
+                            android:textSize="20dp"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="5dp">
+
+                            <ProgressBar
+                                android:layout_weight="10"
+                                android:layout_gravity="center"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:progressTint="@color/red"
+                                android:max="100"
+                                android:progress="64"
+                                android:scaleY="2"/>
+
+                            <TextView
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:text="64%"
+                                android:textSize="15dp" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="5dp">
+
+                            <ProgressBar
+                                android:layout_gravity="center"
+                                android:layout_weight="10"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:progressTint="@color/green"
+                                android:max="100"
+                                android:progress="25"
+                                android:scaleY="2"/>
+
+                            <TextView
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:text="25%"
+                                android:textSize="15dp" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="10dp">
+
+                            <ProgressBar
+                                android:layout_weight="10"
+                                android:layout_gravity="center"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:progressTint="@color/orange"
+                                android:max="100"
+                                android:progress="11"
+                                android:scaleY="2"/>
+
+                            <TextView
+                                android:layout_weight="1"
+                                android:layout_marginLeft="15dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:text="11%"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginBottom="30dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/red"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="탄수화물"
+                                android:textSize="15dp"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/green"
+                                android:layout_marginLeft="15dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="단백질"
+                                android:textSize="15dp"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/orange"
+                                android:layout_marginLeft="15dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="지방"
+                                android:textSize="15dp"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical" >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="실제 영양 섭취 비율"
                             android:textSize="20dp"
                             android:layout_marginLeft="30dp"
                             android:layout_marginBottom="5dp"
@@ -596,7 +890,7 @@
                                 android:progressTint="@color/red"
                                 android:max="100"
                                 android:id="@+id/pbCarboPro"
-                                android:progress="89"
+                                android:progress="0"
                                 android:scaleY="2"/>
 
                             <TextView
@@ -624,7 +918,7 @@
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/green"
                                 android:max="100"
-                                android:progress="3"
+                                android:progress="0"
                                 android:id="@+id/pbProtenPro"
                                 android:scaleY="2"/>
 
@@ -653,7 +947,7 @@
                                 android:layout_marginLeft="20dp"
                                 android:progressTint="@color/orange"
                                 android:max="100"
-                                android:progress="8"
+                                android:progress="0"
                                 android:id="@+id/pbFatPro"
                                 android:scaleY="2"/>
 

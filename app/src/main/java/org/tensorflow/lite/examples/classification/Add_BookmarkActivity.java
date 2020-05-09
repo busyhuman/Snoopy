@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Add_BookmarkActivity extends AppCompatActivity {
 
     String[] c_FoodName = new String[3];
-    String[] list_name = new String[15];
+    String[] list_name = new String[100];
     String[] bookmark, bookmark_name;
     String ID, nowtime, Query;
     Button search_bt;
@@ -84,47 +84,33 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String txtStr = list_name[i];
+                String txtStr = list_name[i];
 
-                Handler mHandler = new Handler(Looper.getMainLooper());
+                String Query = "SELECT Num FROM foods WHERE FoodName='"+ txtStr +"'";
+                myHelper = new myDBHelper(Add_BookmarkActivity.this);
+                sqlDB = myHelper.getReadableDatabase();
+                cursor = sqlDB.rawQuery(Query, null);
 
-                class NewRunnable implements Runnable {
+                while(cursor.moveToNext()){
+                    fdID = cursor.getInt(0);
 
-
-                    @Override
-                    public void run() {
-                        String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/foods/?format=json&FoodName="+ txtStr,
-                                "GET", null);
-                        System.out.println(str);
-                        mHandler.postDelayed(new Runnable() { public void run() {
-                            try {
-                                JSONArray jarray = new JSONArray(str); // JSONArray 생성
-                                JSONObject jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
-                                fdID = jsonObj.getInt("Num");
-                                System.out.println("검색: " + fdID);
-
-                                Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
-                                intent.putExtra("FoodName", c_FoodName);
-                                intent.putExtra("ID", ID);
-                                intent.putExtra("bookbool", 0);
-                                intent.putExtra("FoodID", fdID);
-                                intent.putExtra("eatTime", eatTime);
-                                intent.putExtra("DATE", nowtime);
-                                intent.putExtra("foodNum", foodNum);
-                                intent.putExtra("txtStr", txtStr);
-                                startActivity(intent);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        },0);
-                    }
+                    System.out.println("푸드 num 검색: " + fdID);
                 }
 
-                NewRunnable nr = new NewRunnable() ;
-                Thread t = new Thread(nr) ;
-                t.start();
+                sqlDB.close();
+                cursor.close();
+
+                Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
+                intent.putExtra("FoodName", c_FoodName);
+                intent.putExtra("ID", ID);
+                intent.putExtra("bookbool", 0);
+                intent.putExtra("FoodID", fdID);
+                intent.putExtra("eatTime", eatTime);
+                intent.putExtra("DATE", nowtime);
+                intent.putExtra("foodNum", foodNum);
+                intent.putExtra("txtStr", txtStr);
+                startActivity(intent);
+
 
             }
         });
@@ -210,45 +196,31 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
                 String txtStr = bookmark_name[i];
 
-                Handler mHandler = new Handler(Looper.getMainLooper());
+                String Query = "SELECT Num FROM foods WHERE FoodName='"+ txtStr +"'";
+                myHelper = new myDBHelper(Add_BookmarkActivity.this);
+                sqlDB = myHelper.getReadableDatabase();
+                cursor = sqlDB.rawQuery(Query, null);
 
-                class NewRunnable implements Runnable {
+                while(cursor.moveToNext()){
+                    fdID = cursor.getInt(0);
 
-
-                    @Override
-                    public void run() {
-                        String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/foods/?format=json&FoodName="+ txtStr,
-                                "GET", null);
-                        System.out.println(str);
-                        mHandler.postDelayed(new Runnable() { public void run() {
-                            try {
-                                JSONArray jarray = new JSONArray(str); // JSONArray 생성
-                                JSONObject jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
-                                fdID = jsonObj.getInt("Num");
-                                System.out.println("검색: " + fdID);
-
-                                System.out.println("인텐트 푸드 아이디: " + fdID);
-                                Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
-                                intent.putExtra("FoodName", c_FoodName);
-                                intent.putExtra("ID", ID);
-                                intent.putExtra("FoodID", fdID);
-                                intent.putExtra("bookbool", 1);
-                                intent.putExtra("eatTime", eatTime);
-                                intent.putExtra("DATE", nowtime);
-                                intent.putExtra("foodNum", foodNum);
-                                intent.putExtra("txtStr", txtStr);
-                                startActivity(intent);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        },0);
-                    }
+                    System.out.println("푸드 num 검색: " + fdID);
                 }
-                NewRunnable nr = new NewRunnable() ;
-                Thread t = new Thread(nr) ;
-                t.start();
+
+                sqlDB.close();
+                cursor.close();
+
+                System.out.println("인텐트 푸드 아이디: " + fdID);
+                Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
+                intent.putExtra("FoodName", c_FoodName);
+                intent.putExtra("ID", ID);
+                intent.putExtra("FoodID", fdID);
+                intent.putExtra("bookbool", 1);
+                intent.putExtra("eatTime", eatTime);
+                intent.putExtra("DATE", nowtime);
+                intent.putExtra("foodNum", foodNum);
+                intent.putExtra("txtStr", txtStr);
+                startActivity(intent);
             }
         });
 
@@ -260,7 +232,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 String search_str = search_txt.getText().toString();
 
                 if(!search_str.equals("")){
-                    Query = "SELECT FoodName FROM foods WHERE FoodName LIKE '%"+ search_str +"%' LIMIT 15";
+                    Query = "SELECT FoodName FROM foods WHERE FoodName LIKE '%"+ search_str +"%' LIMIT 100";
                     myHelper = new myDBHelper(Add_BookmarkActivity.this);
                     sqlDB = myHelper.getReadableDatabase();
                     cursor = sqlDB.rawQuery(Query, null);
