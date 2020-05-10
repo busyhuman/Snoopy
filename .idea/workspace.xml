@@ -36,6 +36,8 @@
   </component>
   <component name="ProjectId" id="1bfsrQ84LJarSX91I6iG9HCmjgx" />
   <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="ce07160729dcbf2503" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-05-10T08:50:41.692Z" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="device.picker.selection" value="Nexus_6_API_28" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
