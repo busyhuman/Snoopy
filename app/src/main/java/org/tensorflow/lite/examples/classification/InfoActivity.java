@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -23,6 +24,7 @@ public class InfoActivity extends AppCompatActivity {
 
     int i = 0;
     String[] c_FoodName = new String[3];
+    String spi;
     int foodNum, eatTime, fdID, bookbool, booknum;
     String fd_name, ID, nowtime;
     TextView txtsize, txtkcal, txtcar, txtpro, txtfat, txtNa;
@@ -33,6 +35,7 @@ public class InfoActivity extends AppCompatActivity {
     Cursor cursor;
 
     int size;
+    float[] Serving = new float[3];
     float f_kcal,carbo,pro,fat,Na;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -46,6 +49,7 @@ public class InfoActivity extends AppCompatActivity {
 
         final String[] num = {"1","2", "3", "4"};
 
+        Serving = intent.getFloatArrayExtra("Serving");
         c_FoodName = intent.getStringArrayExtra("FoodName");
         foodNum = intent.getIntExtra("foodNum", 0);
         fdID = intent.getIntExtra("FoodID", 0);
@@ -65,6 +69,10 @@ public class InfoActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter;
         adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, num);
         spinner.setAdapter(adapter);
+
+
+
+
 
         fd_nameView.setText(fd_name);
 
@@ -111,12 +119,13 @@ public class InfoActivity extends AppCompatActivity {
         txtfat = (TextView) findViewById(R.id.txtfat);
         txtNa = (TextView) findViewById(R.id.txtNa);
 
+
         txtsize.setText(String.valueOf(size) + "g");
         txtkcal.setText(String.valueOf(f_kcal) + "kcal");
-        txtcar.setText(String.valueOf(carbo)+"g");
-        txtpro.setText(String.valueOf(pro)+"g");
-        txtfat.setText(String.valueOf(fat)+"g");
-        txtNa.setText(String.valueOf(Na)+"mg");
+        txtcar.setText(String.format("%.2f", carbo)+"g");
+        txtpro.setText(String.format("%.2f", pro)+"g");
+        txtfat.setText(String.format("%.2f", fat)+"g");
+        txtNa.setText(String.format("%.2f", Na)+"mg");
 
 
 
@@ -199,6 +208,28 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                spi = spinner.getSelectedItem().toString();
+                Serving[foodNum-1] = Float.parseFloat(spi);
+
+                txtsize.setText(String.valueOf(size*Serving[foodNum-1]) + "g");
+                txtkcal.setText(String.valueOf(f_kcal*Serving[foodNum-1]) + "kcal");
+                txtcar.setText(String.valueOf(carbo*Serving[foodNum-1])+"g");
+                txtpro.setText(String.valueOf(pro*Serving[foodNum-1])+"g");
+                txtfat.setText(String.valueOf(fat*Serving[foodNum-1])+"g");
+                txtNa.setText(String.valueOf(Na*Serving[foodNum-1])+"mg");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,6 +241,7 @@ public class InfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
+                intent.putExtra("Serving", Serving);
                 intent.putExtra("FoodName", c_FoodName);
                 intent.putExtra("ID", ID);
                 intent.putExtra("eatTime", eatTime);

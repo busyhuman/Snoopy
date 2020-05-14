@@ -21,14 +21,11 @@ import java.net.URLDecoder;
 public class myDBHelper extends SQLiteOpenHelper {
     Context con;
     String str;
+
     public myDBHelper(Context context) {
 
         super(context, "foods", null, 1);
         con = context;
-    }
-
-    public void foodUpdate(){
-
     }
 
     @Override
@@ -53,12 +50,12 @@ public class myDBHelper extends SQLiteOpenHelper {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         try {
+
             JSONArray jarray = new JSONArray(str);
             int len = jarray.length();
 
-            for(int i=0;i<len;i++){
+            for (int i = 0; i < len; i++) {
                 JSONObject jsonObj = jarray.getJSONObject(i);  // JSONObject 추출
 
                 System.out.println(jsonObj);
@@ -73,15 +70,16 @@ public class myDBHelper extends SQLiteOpenHelper {
                 float t_Natrium = Float.parseFloat(jsonObj.getString("Natrium"));
                 try {
                     db.execSQL("INSERT INTO foods (Num, FoodName, Category, ServingSize, Kcal, Carbo, Protein, Fat, Natrium) VALUES ('" + t_Num + "', '" + t_FoodName + "', '" + t_Category + "','" + t_ServingSize + "','" + t_Kcal + "','" + t_Carbo + "','" + t_Protein + "','" + t_Fat + "','" + t_Natrium + "');");
-                } catch (SQLiteException e){
+                } catch (SQLiteException e) {
                     continue;
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-     //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
+        //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

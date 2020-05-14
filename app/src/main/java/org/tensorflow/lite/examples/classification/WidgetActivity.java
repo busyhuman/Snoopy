@@ -45,6 +45,9 @@ public class WidgetActivity extends AppWidgetProvider {
 
     int[] id;
 
+    private static final String CLICK_ACTION = "org.tensorflow.lite.examples.classification.CLICK";
+
+
 
 
     SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd");
@@ -80,9 +83,9 @@ public class WidgetActivity extends AppWidgetProvider {
                 DATE = format.format(cal.getTime());
                 views.setTextViewText(R.id.today, DATE);
                 views.setTextViewText(R.id.txtK1, String.valueOf(totalKcal) +"/"+String.valueOf(setKcal)+"kcal");
-                views.setTextViewText(R.id.txtC, String.valueOf(totalCarbo) +"/"+String.valueOf(setCarbo)+"g");
-                views.setTextViewText(R.id.txtP, String.valueOf(totalProtein) +"/"+String.valueOf(setPro)+"g");
-                views.setTextViewText(R.id.txtF, String.valueOf(totalFat) +"/"+String.valueOf(setFat)+"g");
+                views.setTextViewText(R.id.txtC, String.format("%.2f", totalCarbo) +"/"+String.valueOf(setCarbo)+"g");
+                views.setTextViewText(R.id.txtP, String.format("%.2f", totalProtein) +"/"+String.valueOf(setPro)+"g");
+                views.setTextViewText(R.id.txtF, String.format("%.2f", totalFat) +"/"+String.valueOf(setFat)+"g");
 
         if(totalCarbo == setCarbo){
             views.setImageViewResource(R.id.imgCar_1, R.drawable.green);
@@ -130,7 +133,6 @@ public class WidgetActivity extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        id = appWidgetIds;
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }

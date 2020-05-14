@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.classification;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +20,8 @@ import java.net.URLDecoder;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static org.tensorflow.lite.examples.classification.MainActivity.editor;
+
 public class SignupendActivity extends AppCompatActivity {
 
     String t_name, t_kcal, ID;
@@ -26,6 +29,8 @@ public class SignupendActivity extends AppCompatActivity {
     String str;
     JSONArray userArray;
     JSONObject userObj;
+
+    static SharedPreferences.Editor editor;
 
     private void renew() {
 
@@ -59,8 +64,8 @@ public class SignupendActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        name.setText(t_name);
-        kcal.setText(t_kcal);
+            name.setText(t_name);
+            kcal.setText(t_kcal);
 
     }
 
@@ -83,8 +88,16 @@ public class SignupendActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                editor.putString("ID", "");
+                editor.putString("PW", "");
+                editor.putInt("chk", 0);
+
+                editor.commit();
+
                 startActivity(intent);
             }
         });
     }
 }
+

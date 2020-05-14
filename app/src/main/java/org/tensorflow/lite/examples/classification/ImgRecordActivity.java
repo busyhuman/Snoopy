@@ -52,6 +52,7 @@ public class ImgRecordActivity extends AppCompatActivity {
     String ID, Query, nowtime;
     String[] FoodName, c_fn = new String[3];
     int[] stat_ID = new int[5];
+    float[] Serving = new float[3];
     float[] f_kcal = new float[3];
     float[] carbo = new float[3];
     float[] pro = new float[3];
@@ -78,6 +79,7 @@ public class ImgRecordActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
 
+        Serving = intent.getFloatArrayExtra("Serving");
         FoodName = intent.getStringArrayExtra("FoodName");
         foodNum = intent.getIntExtra("foodNum", 0);
         ID = intent.getStringExtra("ID");
@@ -141,11 +143,13 @@ public class ImgRecordActivity extends AppCompatActivity {
              cursor.close();
             }
 
-        txtfdcal1.setText(String.valueOf(f_kcal[0]));
-        txtfdcal2.setText(String.valueOf(f_kcal[1]));
-        txtfdcal3.setText(String.valueOf(f_kcal[2]));
+        System.out.println("서빙 사이즈: "+Serving[0]+ " " + Serving[1]+ " " + Serving[2]);
 
-        total_kcal = f_kcal[0]+f_kcal[1]+f_kcal[2];
+        txtfdcal1.setText(String.valueOf(f_kcal[0]*Serving[0]));
+        txtfdcal2.setText(String.valueOf(f_kcal[1]*Serving[1]));
+        txtfdcal3.setText(String.valueOf(f_kcal[2]*Serving[2]));
+
+        total_kcal = (f_kcal[0]*Serving[0])+(f_kcal[1]*Serving[1])+(f_kcal[2]*Serving[2]);
 
         totalCal = (TextView) findViewById(R.id.totalkcal);
 
@@ -185,9 +189,13 @@ public class ImgRecordActivity extends AppCompatActivity {
             }
         }
 
-        NewRunnable nr = new NewRunnable();
-        Thread t = new Thread(nr);
+        Thread t = new Thread(new NewRunnable());
         t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -198,6 +206,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("f_kcal", f_kcal);
+                intent.putExtra("Serving", Serving);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("ID", ID);
                 intent.putExtra("foodNum", 1);
@@ -212,6 +221,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
+                intent.putExtra("Serving", Serving);
                 intent.putExtra("ID", ID);
                 intent.putExtra("foodNum", 2);
                 startActivity(intent);
@@ -223,6 +233,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("eatTime", eatTime);
+                intent.putExtra("Serving", Serving);
                 intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("ID", ID);
@@ -250,25 +261,33 @@ public class ImgRecordActivity extends AppCompatActivity {
                     }
                 }
 
-                del_Runnable dnr = new del_Runnable();
-                Thread td = new Thread(dnr);
-                td.start();
+                Thread t = new Thread(new del_Runnable());
+                t.start();
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
 
                 class add_Runnable implements Runnable {
                     @Override
                     public void run() {
                         for (int i = 0; i < 3; i++) {
-                            String post = "Date=" + nowtime + "&Kcal=" + String.valueOf(f_kcal[i]) + "&Carbo=" + String.valueOf(carbo[i]) + "&Protein=" + String.valueOf(pro[i]) + "&Fat=" + String.valueOf(fat[i]) + "&Natrium=" + String.valueOf(Na[i]) + "&Timeslot=" + String.valueOf(eatTime) + "&user=" + ID;
+                            String post = "Date=" + nowtime + "&Kcal=" + String.valueOf(f_kcal[i]*Serving[i]) + "&Carbo=" + String.valueOf(carbo[i]*Serving[i]) + "&Protein=" + String.valueOf(pro[i]*Serving[i]) + "&Fat=" + String.valueOf(fat[i]*Serving[i]) + "&Natrium=" + String.valueOf(Na[i]*Serving[i]) + "&Timeslot=" + String.valueOf(eatTime) + "&user=" + ID;
                             System.out.println("삽입: " + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json",
                                     "POST", post));
                         }
                         System.out.println("삽입 완료");
                     }
                 }
-                add_Runnable anr = new add_Runnable();
-                Thread ta = new Thread(anr);
-                ta.start();
+                Thread t1 = new Thread(new add_Runnable());
+                t1.start();
+                try {
+                    t1.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
 
                 Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);

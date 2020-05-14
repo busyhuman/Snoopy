@@ -73,6 +73,7 @@ import org.tensorflow.lite.examples.classification.env.Logger;
 import org.tensorflow.lite.examples.classification.tflite.Classifier.Device;
 import org.tensorflow.lite.examples.classification.tflite.Classifier.Model;
 import org.tensorflow.lite.examples.classification.tflite.Classifier.Recognition;
+import org.w3c.dom.Text;
 
 public abstract class CameraActivity extends AppCompatActivity
     implements OnImageAvailableListener,
@@ -115,13 +116,16 @@ public abstract class CameraActivity extends AppCompatActivity
   private Spinner modelSpinner;
   private Spinner deviceSpinner;
   private TextView threadsTextView;
-  private TextView txtfood;
+  private TextView txtfood, food_num;
 
   private Model model = Model.FLOAT_EFFICIENTNET;
   private Device device = Device.CPU;
   private int numThreads = -1;
   String ID, nowtime;
   int eatTime;
+  TextView detected_item_value;
+
+  float[] Serving = new float[3];
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
@@ -152,6 +156,8 @@ public abstract class CameraActivity extends AppCompatActivity
     sheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
     bottomSheetArrowImageView = findViewById(R.id.bottom_sheet_arrow);
     txtfood = (TextView) findViewById(R.id.txtfood);
+    detected_item_value = (TextView) findViewById(R.id.detected_item_value);
+    food_num = (TextView) findViewById(R.id.food_num);
 
     ViewTreeObserver vto = gestureLayout.getViewTreeObserver();
     vto.addOnGlobalLayoutListener(
@@ -235,12 +241,24 @@ public abstract class CameraActivity extends AppCompatActivity
 
         String[] FoodName = new String[3];
 
-        FoodName[0] = recognitionTextView.getText().toString();
+        String val_str = food_num.getText().toString();
 
+        float val = Float.parseFloat(val_str);
+
+        if(val>=97){
+          FoodName[0] = recognitionTextView.getText().toString();
+        } else if(val<97){
+          FoodName[0] = "음식 없음";
+        }
+        Serving[0] = 1;
         Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
         for(int i = 1; i<3; i++){
           FoodName[i] = "음식 없음";
+          Serving[i] = 1;
         }
+
+
+        intent.putExtra("Serving", Serving);
         intent.putExtra("FoodName", FoodName);
         intent.putExtra("ID", ID);
         intent.putExtra("DATE", nowtime);
@@ -592,9 +610,11 @@ public abstract class CameraActivity extends AppCompatActivity
         if (recognition.getTitle() != null) { recognitionTextView.setText(recognition.getTitle());
         txtfood.setText(recognition.getTitle());
         }
-        if (recognition.getConfidence() != null)
-          recognitionValueTextView.setText(
-              String.format("%.2f", (100 * recognition.getConfidence())) + "%");
+        if (recognition.getConfidence() != null){
+          recognitionValueTextView.setText(String.format("%.2f", (100 * recognition.getConfidence())) + "%");
+          String str11 = String.format("%.2f", (100 * recognition.getConfidence()));
+          food_num.setText(str11);
+      }
       }
 
       Recognition recognition1 = results.get(1);

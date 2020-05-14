@@ -62,12 +62,23 @@
 
             <TextView
                 android:id="@+id/txtfood"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:textSize="25dp"
+                android:textSize="20dp"
+                android:ellipsize="end"
                 android:textStyle="bold"
                 android:textColor="#ffffff"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:id="@+id/food_num"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="10dp"/>
+
         </androidx.appcompat.widget.Toolbar>
 
     </RelativeLayout>

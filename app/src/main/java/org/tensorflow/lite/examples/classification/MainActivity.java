@@ -1,6 +1,7 @@
 package org.tensorflow.lite.examples.classification;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.Nullable;
@@ -8,11 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     String pw_str = "";
     String j_id, j_pw;
     TextView err;
+    int login_chk = 0;
+
+    int status;
 
     JSONArray jarray;
     JSONObject jsonObj;
@@ -40,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     static SharedPreferences setting;
     static SharedPreferences.Editor editor;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,30 +81,39 @@ public class MainActivity extends AppCompatActivity {
         id_str = setting.getString("ID", "");
         pw_str = setting.getString("PW", "");
 
-        if(!id_str.equals("") && !pw_str.equals("")) {
-            Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
-            intent.putExtra("ID", id_str);
-            startActivity(intent);
+
+
+        status = NetworkStatus.getConnectivityStatus(getApplicationContext());
+
+        if(status == NetworkStatus.TYPE_NOT_CONNECTED){
+            Toast.makeText(getApplicationContext(), "인터넷을 연결해 주세요.", Toast.LENGTH_LONG).show();
+        }else if(status != NetworkStatus.TYPE_NOT_CONNECTED){
+            if(!id_str.equals("") && !pw_str.equals("")) {
+                Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
+                intent.putExtra("ID", id_str);
+                startActivity(intent);
+            }
         }
 
 
 
 
-        myDBHelper dbHelper = new myDBHelper(this);
+
+
 
 
         logbt.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
             public void onClick(View v) {
+                status = NetworkStatus.getConnectivityStatus(getApplicationContext());
 
                 Handler mHandler = new Handler(Looper.getMainLooper());
 
                 id_str = id.getText().toString();
                 pw_str = pw.getText().toString();
-                //    DAO.myDB = dbHelper.getWritableDatabase();
-                //    dbHelper.onCreate(DAO.myDB);
+
+
+
 
                 class NewRunnable implements Runnable {
                     @Override
@@ -116,8 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
                                      editor.putString("ID", j_id);
                                      editor.putString("PW", j_pw);
+                                     editor.putInt("chk", 1);
 
                                      editor.commit();
+
 
                                      Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
                                      intent.putExtra("ID", j_id);
@@ -134,11 +154,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                NewRunnable nr = new NewRunnable() ;
-                Thread t = new Thread(nr) ;
-                t.start();
-
-
+                if(status == NetworkStatus.TYPE_NOT_CONNECTED){
+                    Toast.makeText(getApplicationContext(), "인터넷을 연결해 주세요.", Toast.LENGTH_LONG).show();
+                }else if(status != NetworkStatus.TYPE_NOT_CONNECTED){
+                    Thread t = new Thread(new NewRunnable());
+                    t.start();
+                    try {
+                        t.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 

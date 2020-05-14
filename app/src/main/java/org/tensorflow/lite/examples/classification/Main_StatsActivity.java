@@ -1,10 +1,17 @@
 package org.tensorflow.lite.examples.classification;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,9 +41,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.lite.examples.classification.SnoopyConnection.SnoopyHttpConnection;
 
+import static org.tensorflow.lite.examples.classification.MainActivity.editor;
+import static org.tensorflow.lite.examples.classification.MainActivity.setting;
+
 public class Main_StatsActivity extends AppCompatActivity {
 
     Date date, date_char, date_char1;
+    int chk = 0;
     SimpleDateFormat format, format_char, format_char1;
     String nowtime;
     int eatTime;
@@ -47,13 +58,14 @@ public class Main_StatsActivity extends AppCompatActivity {
     TextView txtTotalCal, txtTotalCarbo, txtTotalProtein, txtTotalFat, txtCarboPercent, txtProteinPercent, txtFatPercent;
     TextView txtCar, txtPro, txtFat, txtCar1, txtPro1, txtFat1;
     TextView timekcal1, timekcal2, timekcal3, txteat1, txteat2, txteat3;
-    Button fd_update;
+    Button fd_update, logout;
 
     float[] mykcal = new float[3];
     float[] dateKcal = new float[5];
     String[] stat = new String[5];
 
     TextView txtMsg;
+
 
 
     ProgressBar pgbCarbo, pgbProtein, pgbFat, pbCarboPro, pbProtenPro, pbFatPro;
@@ -75,6 +87,7 @@ public class Main_StatsActivity extends AppCompatActivity {
     static SharedPreferences.Editor editor1;
 
 
+
     private int checkRecommendedProtein(char gender, int age){
         int[] ageRange = {2, 5, 8, 11, 14, 18, 29 ,49, 64, 74};
         int[][] korProtein = {
@@ -89,6 +102,7 @@ public class Main_StatsActivity extends AppCompatActivity {
         }
         return korProtein[_gender][korProtein[0].length-1];
     }
+
 
 
     private void renew() {
@@ -266,13 +280,13 @@ public class Main_StatsActivity extends AppCompatActivity {
 
 
         txtTotalCal.setText((int)totalKcal + " / " + (int)userKcal + " kcal");
-        txtTotalCarbo.setText(totalCarbo + " / " + Carbo + "g" );
-        txtTotalProtein.setText(totalProtein + " / " + Protein + "g");
-        txtTotalFat.setText(totalFat + " / " + Fat + "g");
+        txtTotalCarbo.setText( String.format("%.2f", totalCarbo) + " / " + Carbo + "g" );
+        txtTotalProtein.setText(String.format("%.2f", totalProtein) + " / " + Protein + "g");
+        txtTotalFat.setText(String.format("%.2f", totalFat) + " / " + Fat + "g");
 
-        txtCar.setText(totalCarbo + " / " + Carbo + "g" );
-        txtPro.setText(totalProtein + " / " + Protein + "g");
-        txtFat.setText(totalFat + " / " + Fat + "g");
+        txtCar.setText(String.format("%.2f", totalCarbo) + " / " + Carbo + "g" );
+        txtPro.setText(String.format("%.2f", totalProtein) + " / " + Protein + "g");
+        txtFat.setText(String.format("%.2f", totalFat) + " / " + Fat + "g");
 
 
         if(totalCarbo == Carbo){
@@ -414,6 +428,8 @@ public class Main_StatsActivity extends AppCompatActivity {
         imgPro2 = (ImageView)findViewById(R.id.imgPro2);
         imgFat2 = (ImageView)findViewById(R.id.imgFat2);
 
+        logout = (Button)findViewById(R.id.logout);
+
         format = new SimpleDateFormat( "yyyy-MM-dd");
         date = new Date();
         Calendar cal = Calendar.getInstance();
@@ -455,15 +471,74 @@ public class Main_StatsActivity extends AppCompatActivity {
 
         renew();
 
-        txtMsg = (TextView) findViewById(R.id.txtMsg);
+
+        chk = setting.getInt("chk", 0);
+
+
+        if(chk == 1) {
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
+
+            TextView text = (TextView) layout.findViewById(R.id.text);
+            text.setText("첫 사용자는 하단의 음식 업데이트 버튼을 눌러 주세요");
+
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
+            toast.setView(layout);
+            toast.show();
+        }
+
+
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.putString("ID", "");
+                editor.putString("PW", "");
+
+                editor1.putInt("setKcal", 0);
+                editor1.putInt("setCarbo", 0);
+                editor1.putInt("setPro", 0);
+                editor1.putInt("setFat", 0);
+
+                editor1.putInt("totalKcal", 0);
+                editor1.putFloat("totalCarbo", 0);
+                editor1.putFloat("totalPro", 0);
+                editor1.putFloat("totalFat", 0);
+
+                editor1.commit();
+                editor.commit();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
 
         fd_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDBHelper dbHelper = new myDBHelper(Main_StatsActivity.this);
-                DAO.myDB = dbHelper.getWritableDatabase();
-                dbHelper.onCreate(DAO.myDB);
-                Toast.makeText(getApplicationContext(), "음식 업데이트 완료!", Toast.LENGTH_LONG).show();
+
+                editor.putInt("chk", 0);
+                editor.commit();
+
+                myDBHelper dbHelper1 = new myDBHelper(Main_StatsActivity.this);
+                DAO.myDB = dbHelper1.getWritableDatabase();
+                dbHelper1.onCreate(DAO.myDB);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
+
+                TextView text = (TextView) layout.findViewById(R.id.text);
+                text.setText("음식 업데이트 완료");
+
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
+                toast.setView(layout);
+                toast.show();
             }
         });
 

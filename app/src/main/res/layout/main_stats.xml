@@ -609,6 +609,17 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
+                    <Button
+                        android:layout_margin="20dp"
+                        android:background="@drawable/buttonshape2"
+                        android:id="@+id/logout"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="로그아웃"
+                        android:textSize="15dp"/>
+
                     <LinearLayout
                         android:layout_gravity="bottom"
                         android:background="#fffff0"
@@ -634,7 +645,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
-                            android:text="클릭 후, 완료 메시지가\n뜰 때까지 기다려 주세요."/>
+                            android:text="클릭 후, 완료 메시지가\n뜰 때까지 기다려 주세요.\n3~4분 소요됩니다."/>
 
 
                     </LinearLayout>

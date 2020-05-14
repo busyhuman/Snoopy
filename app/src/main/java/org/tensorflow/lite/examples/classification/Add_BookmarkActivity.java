@@ -44,6 +44,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
     ListView list,list1;
     JSONArray jarray;
     JSONObject jsonObj;
+    float[] Serving = new float[3];
 
 
     protected void onCreate(@Nullable Bundle savedInstanceState){
@@ -59,6 +60,8 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+
+        Serving = intent.getFloatArrayExtra("Serving");
         c_FoodName = intent.getStringArrayExtra("FoodName");
         foodNum = intent.getIntExtra("foodNum", 0);
         ID = intent.getStringExtra("ID");
@@ -105,6 +108,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 intent.putExtra("ID", ID);
                 intent.putExtra("bookbool", 0);
                 intent.putExtra("FoodID", fdID);
+                intent.putExtra("Serving", Serving);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", foodNum);
@@ -216,6 +220,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 intent.putExtra("ID", ID);
                 intent.putExtra("FoodID", fdID);
                 intent.putExtra("bookbool", 1);
+                intent.putExtra("Serving", Serving);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", foodNum);
