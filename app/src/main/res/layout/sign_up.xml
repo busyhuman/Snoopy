@@ -82,6 +82,7 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:hint="이름"
+            android:maxLength="5"
             android:textSize="15dp" />
 
         <LinearLayout
@@ -137,7 +138,7 @@
             android:layout_margin="5dp"
             android:hint="나이"
             android:inputType="number"
-            android:maxLength="6"
+            android:maxLength="3"
             android:textSize="15dp" />
 
         <LinearLayout

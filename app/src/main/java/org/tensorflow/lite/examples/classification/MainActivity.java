@@ -16,7 +16,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -29,6 +32,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.lite.examples.classification.SnoopyConnection.SnoopyHttpConnection;
 import org.tensorflow.lite.examples.classification.DAO;
+
+import java.util.regex.Pattern;
+
 public class MainActivity extends AppCompatActivity {
 
     Button logbt, signbt;
@@ -49,6 +55,29 @@ public class MainActivity extends AppCompatActivity {
     static SharedPreferences.Editor editor;
 
 
+    protected InputFilter filter= new InputFilter() {
+
+        public CharSequence filter(CharSequence source, int start, int end,
+
+                                   Spanned dest, int dstart, int dend) {
+
+
+
+            Pattern ps = Pattern.compile("^[a-zA-Z0-9]+$");
+
+            if (!ps.matcher(source).matches()) {
+
+                return "";
+
+            }
+            return null;
+        }
+    };
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +90,26 @@ public class MainActivity extends AppCompatActivity {
 
         id = (EditText) findViewById(R.id.id);
         pw = (EditText) findViewById(R.id.pw);
+
+        id.setFilters(new InputFilter[] {filter});
+        pw.setFilters(new InputFilter[] {filter});
+
+        id.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        pw.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
 
 
 
@@ -120,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id_str,
                                 "GET", null);
+                        System.out.println(str);
 
                         mHandler.postDelayed(new Runnable() { public void run() {
                              if(id_str.equals("") || pw_str.equals("")){err.setVisibility(View.VISIBLE);}
@@ -130,19 +180,21 @@ public class MainActivity extends AppCompatActivity {
                                      jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                                      j_id = jsonObj.getString("ID");
                                      j_pw = jsonObj.getString("PW");
-                                     System.out.println(j_id + " " + j_pw);
 
-                                     editor.putString("ID", j_id);
-                                     editor.putString("PW", j_pw);
-                                     editor.putInt("chk", 1);
+                                     if(id_str.equals(j_id ) && pw_str.equals(j_pw)) {
 
-                                     editor.commit();
+                                         editor.putString("ID", j_id);
+                                         editor.putString("PW", j_pw);
+                                         editor.putInt("chk", 1);
 
+                                         editor.commit();
 
-                                     Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
-                                     intent.putExtra("ID", j_id);
-                                     startActivity(intent);
-
+                                         Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
+                                         intent.putExtra("ID", j_id);
+                                         startActivity(intent);
+                                     } else {
+                                         err.setVisibility(View.VISIBLE);
+                                     }
 
                                  } catch (JSONException e) {
                                      e.printStackTrace();

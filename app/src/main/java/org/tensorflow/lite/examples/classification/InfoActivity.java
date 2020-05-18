@@ -30,6 +30,7 @@ public class InfoActivity extends AppCompatActivity {
     TextView txtsize, txtkcal, txtcar, txtpro, txtfat, txtNa;
     JSONArray jarray;
     JSONObject jsonObj;
+    int record;
     myDBHelper myHelper;
     SQLiteDatabase sqlDB;
     Cursor cursor;
@@ -37,6 +38,22 @@ public class InfoActivity extends AppCompatActivity {
     int size;
     float[] Serving = new float[3];
     float f_kcal,carbo,pro,fat,Na;
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent(this, Add_BookmarkActivity.class);
+        intent.putExtra("FoodName", c_FoodName);
+        intent.putExtra("ID", ID);
+        intent.putExtra("FoodID", fdID);
+        intent.putExtra("bookbool", 1);
+        intent.putExtra("Serving", Serving);
+        intent.putExtra("record", record);
+        intent.putExtra("eatTime", eatTime);
+        intent.putExtra("DATE", nowtime);
+        intent.putExtra("foodNum", foodNum);
+        startActivity(intent);
+    }
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -57,6 +74,7 @@ public class InfoActivity extends AppCompatActivity {
         ID = intent.getStringExtra("ID");
         eatTime = intent.getIntExtra("eatTime",0);
         nowtime = intent.getStringExtra("DATE");
+        record = intent.getIntExtra("record", 0);
 
         TextView fd_nameView = (TextView) findViewById(R.id.fd_name);
 
@@ -246,6 +264,7 @@ public class InfoActivity extends AppCompatActivity {
                 intent.putExtra("ID", ID);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("DATE", nowtime);
+                intent.putExtra("record", 0);
                 intent.putExtra("foodNum", foodNum);
                 startActivity(intent);
             }

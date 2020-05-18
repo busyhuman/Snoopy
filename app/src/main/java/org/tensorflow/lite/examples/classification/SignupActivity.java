@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import org.tensorflow.lite.examples.classification.SnoopyConnection.SnoopyHttpCo
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.regex.Pattern;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +41,45 @@ public class SignupActivity extends AppCompatActivity {
     RadioGroup radioGr;
     int id_check=0;
     String id, id2, pw, pw2, name, age, hei, wei, sex, act;
+
+    protected InputFilter filter= new InputFilter() {
+
+        public CharSequence filter(CharSequence source, int start, int end,
+
+                                   Spanned dest, int dstart, int dend) {
+
+
+
+            Pattern ps = Pattern.compile("^[a-zA-Z0-9]+$");
+
+            if (!ps.matcher(source).matches()) {
+
+                return "";
+
+            }
+            return null;
+        }
+    };
+
+    public InputFilter filterKor = new InputFilter() {
+
+        public CharSequence filter(CharSequence source, int start, int end,
+
+                                   Spanned dest, int dstart, int dend) {
+
+            Pattern ps = Pattern.compile("^[ㄱ-ㅎ가-힣]+$");
+
+            if (!ps.matcher(source).matches()) {
+
+                return "";
+
+            }
+
+            return null;
+
+        }
+
+    };
 
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +104,67 @@ public class SignupActivity extends AppCompatActivity {
         edtH = (EditText) findViewById(R.id.edtH);
         edtW = (EditText) findViewById(R.id.edtW);
 
+        edtID.setFilters(new InputFilter[] {filter});
+        edtPW.setFilters(new InputFilter[] {filter});
+        edtPW2.setFilters(new InputFilter[] {filter});
+
+        edtName.setFilters(new InputFilter[] {filterKor});
+
+        edtID.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        edtPW.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        edtPW2.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        edtName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        edtAge.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        edtH.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
+
+        edtW.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
 
 
 
@@ -242,7 +346,27 @@ public class SignupActivity extends AppCompatActivity {
                     });
                     alert.setMessage("입력값을 확인해 주세요.");
                     alert.show();
-                } else{
+                } else if(Integer.parseInt(hei)<129){
+                    AlertDialog.Builder alert = new AlertDialog.Builder(SignupActivity.this);
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();     //닫기
+                        }
+                    });
+                    alert.setMessage("키는 130cm 이상으로 적어 주세요.");
+                    alert.show();
+                }else if(Integer.parseInt(wei)<39){
+                    AlertDialog.Builder alert = new AlertDialog.Builder(SignupActivity.this);
+                    alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();     //닫기
+                        }
+                    });
+                    alert.setMessage("몸무게는 40kg 이상으로 적어 주세요.");
+                    alert.show();
+                }else {
 
                     NewRunnable nr = new NewRunnable() ;
                     Thread t = new Thread(nr) ;

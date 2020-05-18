@@ -125,7 +125,19 @@ public abstract class CameraActivity extends AppCompatActivity
   int eatTime;
   TextView detected_item_value;
 
+
+
   float[] Serving = new float[3];
+
+  @Override
+  public void onBackPressed() {
+    //super.onBackPressed();
+    Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
+    intent.putExtra("eatTime", eatTime);
+    intent.putExtra("DATE", nowtime);
+    intent.putExtra("ID", ID);
+    startActivity(intent);
+  }
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {

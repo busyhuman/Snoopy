@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -41,10 +45,29 @@ public class Add_BookmarkActivity extends AppCompatActivity {
     myDBHelper myHelper;
     SQLiteDatabase sqlDB;
     Cursor cursor;
+    int record;
     ListView list,list1;
     JSONArray jarray;
     JSONObject jsonObj;
     float[] Serving = new float[3];
+
+    TextView text;
+    View layout;
+    LayoutInflater inflater;
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
+        intent.putExtra("FoodName", c_FoodName);
+        intent.putExtra("eatTime", eatTime);
+        intent.putExtra("Serving", Serving);
+        intent.putExtra("DATE", nowtime);
+        intent.putExtra("record", record);
+        intent.putExtra("ID", ID);
+        intent.putExtra("foodNum", 3);
+        startActivity(intent);
+    }
 
 
     protected void onCreate(@Nullable Bundle savedInstanceState){
@@ -54,6 +77,14 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         ImageView back = (ImageView) findViewById(R.id.back);
         search_bt = (Button) findViewById(R.id.search_btn);
         search_txt = (EditText) findViewById(R.id.search_txt);
+
+        search_txt.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==event.KEYCODE_ENTER) return true;
+                return false;
+            }
+        });
 
         TabHost tabHost = (TabHost)findViewById(R.id.host);
         tabHost.setup();
@@ -67,6 +98,13 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         ID = intent.getStringExtra("ID");
         eatTime = intent.getIntExtra("eatTime",0);
         nowtime = intent.getStringExtra("DATE");
+        record = intent.getIntExtra("record", 0);
+
+        System.out.println(c_FoodName[0] + c_FoodName[1] + c_FoodName[2]);
+
+        inflater = getLayoutInflater();
+        layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
+        text = (TextView) layout.findViewById(R.id.text);
 
 
         TabHost.TabSpec tabSpecDog = tabHost.newTabSpec("search").setIndicator("검색");
@@ -109,6 +147,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 intent.putExtra("bookbool", 0);
                 intent.putExtra("FoodID", fdID);
                 intent.putExtra("Serving", Serving);
+                intent.putExtra("record", record);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", foodNum);
@@ -214,7 +253,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 sqlDB.close();
                 cursor.close();
 
-                System.out.println("인텐트 푸드 아이디: " + fdID);
                 Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
                 intent.putExtra("FoodName", c_FoodName);
                 intent.putExtra("ID", ID);
@@ -222,6 +260,7 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 intent.putExtra("bookbool", 1);
                 intent.putExtra("Serving", Serving);
                 intent.putExtra("eatTime", eatTime);
+                intent.putExtra("record", record);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", foodNum);
                 intent.putExtra("txtStr", txtStr);
@@ -253,6 +292,13 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(Add_BookmarkActivity.this,  android.R.layout.simple_list_item_1, fdlist);
 
                     list.setAdapter(adapter);
+                } else if(search_str.equals("")){
+                    text.setText("음식명을 입력해 주세요.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
+                    toast.setView(layout);
+                    toast.show();
                 }
             }
         });

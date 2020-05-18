@@ -67,25 +67,25 @@ public class WidgetActivity extends AppWidgetProvider {
 
 
 
-                ID = setting.getString("ID", "");
-                setKcal = setting1.getInt("setKcal", 0);
-                setCarbo = setting1.getInt("setCarbo", 0);
-                setPro = setting1.getInt("setPro", 0);
-                setFat = setting1.getInt("setFat", 0);
+        ID = setting.getString("ID", "");
+        setKcal = setting1.getInt("setKcal", 0);
+        setCarbo = setting1.getInt("setCarbo", 0);
+        setPro = setting1.getInt("setPro", 0);
+        setFat = setting1.getInt("setFat", 0);
 
-                totalKcal = setting1.getInt("totalKcal", 0);
-                totalCarbo = setting1.getFloat("totalCarbo", 0);
-                totalProtein = setting1.getFloat("totalPro", 0);
-               totalFat = setting1.getFloat("totalFat", 0);
+        totalKcal = setting1.getInt("totalKcal", 0);
+        totalCarbo = setting1.getFloat("totalCarbo", 0);
+        totalProtein = setting1.getFloat("totalPro", 0);
+        totalFat = setting1.getFloat("totalFat", 0);
 
 
-                cal.setTime(date);
-                DATE = format.format(cal.getTime());
-                views.setTextViewText(R.id.today, DATE);
-                views.setTextViewText(R.id.txtK1, String.valueOf(totalKcal) +"/"+String.valueOf(setKcal)+"kcal");
-                views.setTextViewText(R.id.txtC, String.format("%.2f", totalCarbo) +"/"+String.valueOf(setCarbo)+"g");
-                views.setTextViewText(R.id.txtP, String.format("%.2f", totalProtein) +"/"+String.valueOf(setPro)+"g");
-                views.setTextViewText(R.id.txtF, String.format("%.2f", totalFat) +"/"+String.valueOf(setFat)+"g");
+        cal.setTime(date);
+        DATE = format.format(cal.getTime());
+        views.setTextViewText(R.id.today, DATE);
+        views.setTextViewText(R.id.txtK1, String.valueOf(totalKcal) +"/"+String.valueOf(setKcal)+"kcal");
+        views.setTextViewText(R.id.txtC, String.format("%.2f", totalCarbo) +"/"+String.valueOf(setCarbo)+"g");
+        views.setTextViewText(R.id.txtP, String.format("%.2f", totalProtein) +"/"+String.valueOf(setPro)+"g");
+        views.setTextViewText(R.id.txtF, String.format("%.2f", totalFat) +"/"+String.valueOf(setFat)+"g");
 
         if(totalCarbo == setCarbo){
             views.setImageViewResource(R.id.imgCar_1, R.drawable.green);

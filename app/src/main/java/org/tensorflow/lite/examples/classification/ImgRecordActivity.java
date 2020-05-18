@@ -70,6 +70,27 @@ public class ImgRecordActivity extends AppCompatActivity {
     JSONArray jarray;
     JSONObject jsonObj;
     String str, str1;
+    String[] f_name = new String[3];
+    int record;
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        if(record == 0) {
+        Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+        intent.putExtra("Serving", Serving);
+        intent.putExtra("FoodName", FoodName);
+        intent.putExtra("ID", ID);
+        intent.putExtra("DATE", nowtime);
+        intent.putExtra("eatTime", eatTime);
+        startActivity(intent);
+        }
+        else if(record == 1) {
+            Intent intent = new Intent(getApplicationContext(), Main_StatsActivity.class);
+            intent.putExtra("ID", ID);
+            startActivity(intent);
+        }
+    }
 
 
 
@@ -84,11 +105,14 @@ public class ImgRecordActivity extends AppCompatActivity {
         foodNum = intent.getIntExtra("foodNum", 0);
         ID = intent.getStringExtra("ID");
         eatTime = intent.getIntExtra("eatTime",0);
+        record = intent.getIntExtra("record",0);
         nowtime = intent.getStringExtra("DATE");
 
         final Button endbtn;
         final TextView txtname1, txtname2, txtname3;
         final LinearLayout fdl1, fdl2, fdl3;
+
+
 
         t_eatTime = (TextView) findViewById(R.id.eatTime);
 
@@ -113,47 +137,6 @@ public class ImgRecordActivity extends AppCompatActivity {
 
         endbtn = (Button)findViewById(R.id.end_btn);
 
-        txtname1.setText(FoodName[0]);
-        txtname2.setText(FoodName[1]);
-        txtname3.setText(FoodName[2]);
-
-        datetxt = (TextView) findViewById(R.id.datetxt);
-
-        datetxt.setText(nowtime);
-
-
-            for(int i=0; i<3; i++) {
-            Query = "SELECT Num, FoodName, Kcal, Carbo, Protein, Fat, Natrium FROM foods WHERE FoodName='"+ FoodName[i] +"'";
-            myHelper = new myDBHelper(this);
-            sqlDB = myHelper.getReadableDatabase();
-            cursor = sqlDB.rawQuery(Query, null);
-
-            while(cursor.moveToNext()){
-                f_ID[i] = cursor.getInt(0);
-                c_fn[i]  = cursor.getString(1);
-                f_kcal[i] = cursor.getFloat(2);
-                carbo[i] = cursor.getFloat(3);
-                pro[i] = cursor.getFloat(4);
-                fat[i] = cursor.getFloat(5);
-                Na[i] = cursor.getFloat(6);
-            }
-            System.out.println(c_fn[i]+ " " + f_kcal[i]);
-
-             sqlDB.close();
-             cursor.close();
-            }
-
-        System.out.println("서빙 사이즈: "+Serving[0]+ " " + Serving[1]+ " " + Serving[2]);
-
-        txtfdcal1.setText(String.valueOf(f_kcal[0]*Serving[0]));
-        txtfdcal2.setText(String.valueOf(f_kcal[1]*Serving[1]));
-        txtfdcal3.setText(String.valueOf(f_kcal[2]*Serving[2]));
-
-        total_kcal = (f_kcal[0]*Serving[0])+(f_kcal[1]*Serving[1])+(f_kcal[2]*Serving[2]);
-
-        totalCal = (TextView) findViewById(R.id.totalkcal);
-
-        totalCal.setText(String.valueOf(total_kcal));
 
         Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -164,7 +147,6 @@ public class ImgRecordActivity extends AppCompatActivity {
             public void run() {
                 str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&user=" + ID + "&Date=" + nowtime + "&Timeslot=" + String.valueOf(eatTime),
                         "GET", null);
-                System.out.println("기록화면 검색: " + str);
 
                 mHandler.postDelayed(new Runnable() {
                     public void run() {
@@ -174,16 +156,33 @@ public class ImgRecordActivity extends AppCompatActivity {
                                 for (int i = 0; i < 3; i++) {
                                     jsonObj = jarray.getJSONObject(i);  // JSONObject 추출
                                     stat_ID[i] = jsonObj.getInt("StatsID");
-                                    System.out.println(i+ " sID: " + stat_ID[i]);
+                                    f_name[i] = jsonObj.getString("FoodName");
+
+                                    if(record == 1) {
+                                        FoodName[i] = "";
+                                        FoodName[i] = f_name[i];
+                                    }
+
                                 }
                                 //jsonObj = jarray.getJSONObject(0);
                                 //stat_ID[0] = jsonObj.getInt("StatsID");
-                                System.out.println("1 sID: " + stat_ID[1]);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                        System.out.println("검색 완료");
+
+                        System.out.println("record: " + record);
+                        if(record==0) {
+                            txtname1.setText(FoodName[0]);
+                            txtname2.setText(FoodName[1]);
+                            txtname3.setText(FoodName[2]);
+                            System.out.println("카메라");
+                        } else if(record==1){
+                            txtname1.setText(f_name[0]);
+                            txtname2.setText(f_name[1]);
+                            txtname3.setText(f_name[2]);
+                            System.out.println("바로");
+                        }
                     }
                 }, 0);
             }
@@ -199,12 +198,65 @@ public class ImgRecordActivity extends AppCompatActivity {
 
 
 
+        datetxt = (TextView) findViewById(R.id.datetxt);
+
+        datetxt.setText(nowtime);
+
+
+            for(int i=0; i<3; i++) {
+                if(record ==0 ) {
+                    Query = "SELECT Num, FoodName, Kcal, Carbo, Protein, Fat, Natrium FROM foods WHERE FoodName='" + FoodName[i] + "'";
+                    myHelper = new myDBHelper(this);
+                    sqlDB = myHelper.getReadableDatabase();
+                    cursor = sqlDB.rawQuery(Query, null);
+                } else if(record ==1 ){
+                    Query = "SELECT Num, FoodName, Kcal, Carbo, Protein, Fat, Natrium FROM foods WHERE FoodName='" + f_name[i] + "'";
+                    myHelper = new myDBHelper(this);
+                    sqlDB = myHelper.getReadableDatabase();
+                    cursor = sqlDB.rawQuery(Query, null);
+                }
+
+            while(cursor.moveToNext()){
+                f_ID[i] = cursor.getInt(0);
+                c_fn[i]  = cursor.getString(1);
+                f_kcal[i] = cursor.getFloat(2);
+                carbo[i] = cursor.getFloat(3);
+                if(carbo[i]==-1) carbo[i]=0;
+                pro[i] = cursor.getFloat(4);
+                if(pro[i]==-1) pro[i]=0;
+                fat[i] = cursor.getFloat(5);
+                if(fat[i]==-1) fat[i]=0;
+                Na[i] = cursor.getFloat(6);
+                if(Na[i]==-1) Na[i]=0;
+            }
+
+             sqlDB.close();
+             cursor.close();
+            }
+
+
+
+        txtfdcal1.setText(String.valueOf(f_kcal[0]*Serving[0]));
+        txtfdcal2.setText(String.valueOf(f_kcal[1]*Serving[1]));
+        txtfdcal3.setText(String.valueOf(f_kcal[2]*Serving[2]));
+
+        total_kcal = (f_kcal[0]*Serving[0])+(f_kcal[1]*Serving[1])+(f_kcal[2]*Serving[2]);
+
+        totalCal = (TextView) findViewById(R.id.totalkcal);
+
+        totalCal.setText(String.format("%.2f", total_kcal));
+
+
+
+
+
         fdl1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("eatTime", eatTime);
+                intent.putExtra("record", record);
                 intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("Serving", Serving);
                 intent.putExtra("DATE", nowtime);
@@ -219,6 +271,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Add_BookmarkActivity.class);
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("eatTime", eatTime);
+                intent.putExtra("record", record);
                 intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("Serving", Serving);
@@ -234,6 +287,7 @@ public class ImgRecordActivity extends AppCompatActivity {
                 intent.putExtra("FoodName", FoodName);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("Serving", Serving);
+                intent.putExtra("record", record);
                 intent.putExtra("f_kcal", f_kcal);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("ID", ID);
@@ -254,10 +308,8 @@ public class ImgRecordActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         for (int i = 0; i < 3; i++) {
-                            System.out.println("삭제 sID: " + stat_ID[i]);
                             System.out.println("삭제" + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/" + String.valueOf(stat_ID[i]) + "/", "DELETE", null));
                         }
-                        System.out.println("삭제 완료");
                     }
                 }
 
@@ -274,11 +326,14 @@ public class ImgRecordActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         for (int i = 0; i < 3; i++) {
-                            String post = "Date=" + nowtime + "&Kcal=" + String.valueOf(f_kcal[i]*Serving[i]) + "&Carbo=" + String.valueOf(carbo[i]*Serving[i]) + "&Protein=" + String.valueOf(pro[i]*Serving[i]) + "&Fat=" + String.valueOf(fat[i]*Serving[i]) + "&Natrium=" + String.valueOf(Na[i]*Serving[i]) + "&Timeslot=" + String.valueOf(eatTime) + "&user=" + ID;
+                            try{
+                            String post = "Date=" + nowtime + "&Kcal=" + String.valueOf(f_kcal[i]*Serving[i]) + "&Carbo=" + String.valueOf(carbo[i]*Serving[i]) + "&Protein=" + String.valueOf(pro[i]*Serving[i]) + "&Fat=" + String.valueOf(fat[i]*Serving[i]) + "&Natrium=" + String.valueOf(Na[i]*Serving[i]) + "&Timeslot=" + String.valueOf(eatTime) + "&user=" + ID + "&FoodName=" + URLEncoder.encode(FoodName[i], "UTF-8");
                             System.out.println("삽입: " + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json",
                                     "POST", post));
+                        }catch (UnsupportedEncodingException e){
+                            e.printStackTrace();
                         }
-                        System.out.println("삽입 완료");
+                        }
                     }
                 }
                 Thread t1 = new Thread(new add_Runnable());

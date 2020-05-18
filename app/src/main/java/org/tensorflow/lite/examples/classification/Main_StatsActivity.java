@@ -46,10 +46,11 @@ import static org.tensorflow.lite.examples.classification.MainActivity.setting;
 
 public class Main_StatsActivity extends AppCompatActivity {
 
-    Date date, date_char, date_char1;
+    Date date, date_char, date_char1, today;
     int chk = 0;
+    int update_chk = 0;
     SimpleDateFormat format, format_char, format_char1;
-    String nowtime;
+    String nowtime, todaytime;
     int eatTime;
     String[] cal_time = new String[5];
     String[] cal_time1 = new String[5];
@@ -60,9 +61,21 @@ public class Main_StatsActivity extends AppCompatActivity {
     TextView timekcal1, timekcal2, timekcal3, txteat1, txteat2, txteat3;
     Button fd_update, logout;
 
+    float[] Serving = new float[3];
     float[] mykcal = new float[3];
     float[] dateKcal = new float[5];
     String[] stat = new String[5];
+
+    String[] f_sate = new String[3];
+
+    String[] FoodName = new String[3];
+
+
+    TextView text;
+    View layout;
+    LayoutInflater inflater;
+
+    int[] record = new int[3];
 
     TextView txtMsg;
 
@@ -127,18 +140,20 @@ public class Main_StatsActivity extends AppCompatActivity {
                 for(int i=0; i<5; i++){
                     stat[i] = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&Date=" + cal_time[i] + "&user=" + ID,
                             "GET", null);
-                    System.out.println("날짜: "+ cal_time[i]);
                 }
                 String user = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + ID,
                         "GET", null);
+                for(int i=0; i<3; i++) {
+                    f_sate[i] = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&Date=" + cal_time[0] + "&user=" + ID + "&Timeslot=" + String.valueOf(i),
+                            "GET", null);
+                }
 
 
 
                 try {
-
                     JSONArray statArray = new JSONArray(stat[0]);
-
                     int len = statArray.length();
+
 
                     try{
 
@@ -150,14 +165,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                         totalProtein = 0;
                         totalFat = 0;
 
-                        System.out.println("아침 칼로리 초기화: "+ mykcal[0]);
-                        System.out.println("점심 칼로리 초기화: "+ mykcal[1]);
-                        System.out.println("저녁 칼로리 초기화: "+ mykcal[2]);
-
-                        System.out.println("URL: "+ stat[0]);
 
 
                         for(int i=0;i<len;i++) {
+
                             JSONObject statObj = statArray.getJSONObject(i);
                             totalKcal += Float.parseFloat(statObj.getString("Kcal"));
                             totalCarbo += Float.parseFloat(statObj.getString("Carbo"));
@@ -167,7 +178,6 @@ public class Main_StatsActivity extends AppCompatActivity {
 
                             if (statObj.getString("Timeslot").equals("0")) {
                                 mykcal[0] += Float.parseFloat(statObj.getString("Kcal"));
-                                System.out.println(i+"아침 칼로리: " + mykcal[0]);
                             } else if (statObj.getString("Timeslot").equals("1")) {
                                 mykcal[1] += Float.parseFloat(statObj.getString("Kcal"));
                             } else if (statObj.getString("Timeslot").equals("2")) {
@@ -175,10 +185,6 @@ public class Main_StatsActivity extends AppCompatActivity {
                             }
                         }
 
-
-                        System.out.println("아침 칼로리: "+ mykcal[0]);
-                        System.out.println("점심 칼로리: "+ mykcal[1]);
-                        System.out.println("저녁 칼로리: "+ mykcal[2]);
 
 
 
@@ -215,7 +221,6 @@ public class Main_StatsActivity extends AppCompatActivity {
                     for(int i =0; i<5; i++) {
                         JSONArray statArray = new JSONArray(stat[i]);
                         int len = statArray.length();
-                        System.out.println("길이: "+ String.valueOf(len));
                         for(int j=0;j<len;j++){
                             try{
                                 JSONObject statObj = statArray.getJSONObject(j);
@@ -226,7 +231,6 @@ public class Main_StatsActivity extends AppCompatActivity {
                                 continue;
                             }
                         }
-                        System.out.println(cal_time[i] + " kcal: "+ String.valueOf(dateKcal[i]));
                     }
 
 
@@ -352,8 +356,6 @@ public class Main_StatsActivity extends AppCompatActivity {
         barchart.animateXY(7,3000);
         barchart.setMinimumHeight(0);
         barchart.invalidate();
-        setting1 = getSharedPreferences("setting1", 0);
-        editor1= setting1.edit();
 
         editor1.putInt("setKcal", (int)userKcal);
         editor1.putInt("setCarbo", Carbo);
@@ -367,6 +369,28 @@ public class Main_StatsActivity extends AppCompatActivity {
 
         editor1.commit();
 
+
+
+    }
+
+    private final long FINISH_INTERVAL_TIME = 2000;
+    private long   backPressedTime = 0;
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        long tempTime = System.currentTimeMillis();
+        long intervalTime = tempTime - backPressedTime;
+
+        if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime){
+            moveTaskToBack(true);
+            finish();
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }else {
+            backPressedTime = tempTime;
+            Toast.makeText(getApplicationContext(), "한번 더 뒤로가기 하시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -376,6 +400,9 @@ public class Main_StatsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ID = intent.getStringExtra("ID");
+
+        setting1 = getSharedPreferences("setting1", 0);
+        editor1= setting1.edit();
 
         TextView txtcal = (TextView) findViewById(R.id.txtCalendar);
         LinearLayout bt1 = (LinearLayout) findViewById(R.id.bt1) ;
@@ -436,6 +463,12 @@ public class Main_StatsActivity extends AppCompatActivity {
         cal.setTime(date);
         nowtime = format.format(cal.getTime());
 
+        today = new Date();
+        Calendar cal_today = Calendar.getInstance();
+        cal_today.setTime(today);
+        todaytime = format.format(cal_today.getTime());
+
+
         txtcal.setText(nowtime);
 
         format_char = new SimpleDateFormat( "yyyy-MM-dd");
@@ -456,6 +489,10 @@ public class Main_StatsActivity extends AppCompatActivity {
         cal_char1.setTime(date_char);
         cal_time1[0] = format_char1.format(cal_char1.getTime());
 
+        inflater = getLayoutInflater();
+        layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
+        text = (TextView) layout.findViewById(R.id.text);
+
         for(int i=1; i<5; i++) {
             cal_char1.add(Calendar.DATE, -1);
             cal_time1[i] = format_char1.format(cal_char1.getTime());
@@ -468,18 +505,19 @@ public class Main_StatsActivity extends AppCompatActivity {
         totalCarbo = 0;
         totalProtein = 0;
         totalFat = 0;
+        for(int i=0; i<3; i++) {
+            Serving[i] = 1;
+        }
+
 
         renew();
 
 
         chk = setting.getInt("chk", 0);
+        update_chk = setting1.getInt("update_chk",0);
 
 
-        if(chk == 1) {
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
-
-            TextView text = (TextView) layout.findViewById(R.id.text);
+        if(update_chk == 0) {
             text.setText("첫 사용자는 하단의 음식 업데이트 버튼을 눌러 주세요");
 
             Toast toast = new Toast(getApplicationContext());
@@ -521,12 +559,13 @@ public class Main_StatsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                editor.putInt("chk", 0);
-                editor.commit();
+                editor1.putInt("update_chk", 1);
+                editor1.commit();
 
                 myDBHelper dbHelper1 = new myDBHelper(Main_StatsActivity.this);
                 DAO.myDB = dbHelper1.getWritableDatabase();
-                dbHelper1.onCreate(DAO.myDB);
+                //dbHelper1.onCreate(DAO.myDB);
+                dbHelper1.fiilFoodTable(DAO.myDB);
 
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
@@ -539,6 +578,8 @@ public class Main_StatsActivity extends AppCompatActivity {
                 toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
                 toast.setView(layout);
                 toast.show();
+
+                update_chk = setting1.getInt("update_chk",0);
             }
         });
 
@@ -571,26 +612,27 @@ public class Main_StatsActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cal.add(Calendar.DATE, 1);
-                nowtime = format.format(cal.getTime());
-                Calendar cal1 = Calendar.getInstance();
-                cal1.setTime(cal.getTime());
-                txtcal.setText(nowtime);
+                if(!nowtime.equals(todaytime)) {
+                    cal.add(Calendar.DATE, 1);
+                    nowtime = format.format(cal.getTime());
+                    Calendar cal1 = Calendar.getInstance();
+                    cal1.setTime(cal.getTime());
+                    txtcal.setText(nowtime);
 
-                cal_time[0] = format_char.format(cal1.getTime());
-                cal_time1[0] = format_char1.format(cal1.getTime());
+                    cal_time[0] = format_char.format(cal1.getTime());
+                    cal_time1[0] = format_char1.format(cal1.getTime());
 
-                for(int i=1; i<5; i++) {
-                    cal1.add(Calendar.DATE, -1);
-                    cal_time1[i] = format_char1.format(cal1.getTime());
+                    for(int i=1; i<5; i++) {
+                        cal1.add(Calendar.DATE, -1);
+                        cal_time1[i] = format_char1.format(cal1.getTime());
+                    }
+                    cal1.add(Calendar.DATE, 4);
+                    for(int i=1; i<5; i++) {
+                        cal1.add(Calendar.DATE, -1);
+                        cal_time[i] = format_char.format(cal1.getTime());
+                    }
+                    renew();
                 }
-                cal1.add(Calendar.DATE, 4);
-                for(int i=1; i<5; i++) {
-                    cal1.add(Calendar.DATE, -1);
-                    cal_time[i] = format_char.format(cal1.getTime());
-                }
-
-                renew();
             }
         });
 
@@ -610,36 +652,101 @@ public class Main_StatsActivity extends AppCompatActivity {
 
         tabHost.setCurrentTab(0);
 
+        FoodName[0] = "음식 없음";
+        FoodName[1] = "음식 없음";
+        FoodName[2] = "음식 없음";
+
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
-                intent.putExtra("eatTime", 0);
-                intent.putExtra("DATE", nowtime);
-                intent.putExtra("ID", ID);
-                startActivity(intent);
+                if(update_chk == 0){
+                    text.setText("음식 업데이트를 해 주세요.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
+                    toast.setView(layout);
+                    toast.show();
+                } else if(update_chk == 1) {
+                    if(mykcal[0]!=0) {
+                        Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
+                        intent.putExtra("eatTime", 0);
+                        intent.putExtra("DATE", nowtime);
+                        intent.putExtra("record", 1);
+                        intent.putExtra("FoodName", FoodName);
+                        intent.putExtra("Serving", Serving);
+                        intent.putExtra("ID", ID);
+                        startActivity(intent);
+                    } else if(mykcal[0] == 0) {
+                        Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
+                        intent.putExtra("eatTime", 0);
+                        intent.putExtra("DATE", nowtime);
+                        intent.putExtra("ID", ID);
+                        startActivity(intent);
+                    }
+                }
             }
         });
 
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
-                intent.putExtra("eatTime", 1);
-                intent.putExtra("DATE", nowtime);
-                intent.putExtra("ID", ID);
-                startActivity(intent);
+
+                if(update_chk == 0){
+                    text.setText("음식 업데이트를 해 주세요.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
+                    toast.setView(layout);
+                    toast.show();
+                } else if(update_chk == 1) {
+                    if(mykcal[1]!=0) {
+                        Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
+                        intent.putExtra("eatTime", 1);
+                        intent.putExtra("DATE", nowtime);
+                        intent.putExtra("record", 1);
+                        intent.putExtra("FoodName", FoodName);
+                        intent.putExtra("Serving", Serving);
+                        intent.putExtra("ID", ID);
+                        startActivity(intent);
+                    } else if(mykcal[1] == 0) {
+                        Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
+                        intent.putExtra("eatTime", 1);
+                        intent.putExtra("DATE", nowtime);
+                        intent.putExtra("ID", ID);
+                        startActivity(intent);
+                    }
+                }
             }
         });
 
         bt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
-                intent.putExtra("eatTime", 2);
-                intent.putExtra("DATE", nowtime);
-                intent.putExtra("ID", ID);
-                startActivity(intent);
+                if(update_chk == 0){
+                    text.setText("음식 업데이트를 해 주세요.");
+                    Toast toast = new Toast(getApplicationContext());
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP|Gravity.LEFT, 100, 550);
+                    toast.setView(layout);
+                    toast.show();
+                } else if(update_chk == 1) {
+                    if(mykcal[2]!=0) {
+                        Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
+                        intent.putExtra("eatTime", 2);
+                        intent.putExtra("DATE", nowtime);
+                        intent.putExtra("record", 1);
+                        intent.putExtra("FoodName", FoodName);
+                        intent.putExtra("Serving", Serving);
+                        intent.putExtra("ID", ID);
+                        startActivity(intent);
+                    } else if(mykcal[2] == 0) {
+                        Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
+                        intent.putExtra("eatTime", 2);
+                        intent.putExtra("DATE", nowtime);
+                        intent.putExtra("ID", ID);
+                        startActivity(intent);
+                    }
+                }
             }
         });
     }
