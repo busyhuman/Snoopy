@@ -36,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Add_BookmarkActivity extends AppCompatActivity {
 
     String[] c_FoodName = new String[3];
+    String[] bf_FN = new String[3];
     String[] list_name = new String[100];
     String[] bookmark, bookmark_name;
     String ID, nowtime, Query;
@@ -45,7 +46,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
     myDBHelper myHelper;
     SQLiteDatabase sqlDB;
     Cursor cursor;
-    int record;
     ListView list,list1;
     JSONArray jarray;
     JSONObject jsonObj;
@@ -63,7 +63,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         intent.putExtra("eatTime", eatTime);
         intent.putExtra("Serving", Serving);
         intent.putExtra("DATE", nowtime);
-        intent.putExtra("record", record);
         intent.putExtra("ID", ID);
         intent.putExtra("foodNum", 3);
         startActivity(intent);
@@ -78,14 +77,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         search_bt = (Button) findViewById(R.id.search_btn);
         search_txt = (EditText) findViewById(R.id.search_txt);
 
-        search_txt.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
         TabHost tabHost = (TabHost)findViewById(R.id.host);
         tabHost.setup();
 
@@ -98,9 +89,8 @@ public class Add_BookmarkActivity extends AppCompatActivity {
         ID = intent.getStringExtra("ID");
         eatTime = intent.getIntExtra("eatTime",0);
         nowtime = intent.getStringExtra("DATE");
-        record = intent.getIntExtra("record", 0);
+        bf_FN = c_FoodName;
 
-        System.out.println(c_FoodName[0] + c_FoodName[1] + c_FoodName[2]);
 
         inflater = getLayoutInflater();
         layout = inflater.inflate(R.layout.toast_border, (ViewGroup)findViewById(R.id.toast_layout_root));
@@ -135,7 +125,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 while(cursor.moveToNext()){
                     fdID = cursor.getInt(0);
 
-                    System.out.println("푸드 num 검색: " + fdID);
                 }
 
                 sqlDB.close();
@@ -143,11 +132,11 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(Add_BookmarkActivity.this, InfoActivity.class);
                 intent.putExtra("FoodName", c_FoodName);
+                intent.putExtra("bf_FN", bf_FN);
                 intent.putExtra("ID", ID);
                 intent.putExtra("bookbool", 0);
                 intent.putExtra("FoodID", fdID);
                 intent.putExtra("Serving", Serving);
-                intent.putExtra("record", record);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", foodNum);
@@ -166,14 +155,12 @@ public class Add_BookmarkActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/bookmarks/?format=json&user="+ ID,
+                String str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/bookmarks/?format=json&user="+ ID,
                         "GET", null);
-                System.out.println("북바크 검색: " + str);
                 mHandler.postDelayed(new Runnable() { public void run() {
                     try {
                         JSONArray jarray = new JSONArray(str); // JSONArray 생성
                         bookmark = new String[jarray.length()];
-                        System.out.println("북바크 길이: " + jarray.length());
                         for(int i=0; i<jarray.length(); i++) {
                             JSONObject jsonObj = jarray.getJSONObject(i);  // JSONObject 추출
                             bookmark[i] = jsonObj.getString("FoodNum");
@@ -202,9 +189,8 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                     public void run() {
                         String[] str = new String[bookmark.length];
                         for(int i=0; i<bookmark.length; i++) {
-                            str[i] = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/foods/?format=json&Num="+ bookmark[i],
+                            str[i] = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/foods/?format=json&Num="+ bookmark[i],
                                     "GET", null);
-                            System.out.println("푸드 검색: "+str[i]);
                         }
                         bookmark_name = new String[str.length];
                         mHandler.postDelayed(new Runnable() { public void run() {
@@ -213,7 +199,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                                     jarray = new JSONArray(str[i]); // JSONArray 생성
                                     jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                                     bookmark_name[i] =jsonObj.getString("FoodName");
-                                    System.out.println("북마크 네임: " + bookmark[i]);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -247,7 +232,6 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 while(cursor.moveToNext()){
                     fdID = cursor.getInt(0);
 
-                    System.out.println("푸드 num 검색: " + fdID);
                 }
 
                 sqlDB.close();
@@ -259,8 +243,8 @@ public class Add_BookmarkActivity extends AppCompatActivity {
                 intent.putExtra("FoodID", fdID);
                 intent.putExtra("bookbool", 1);
                 intent.putExtra("Serving", Serving);
+                intent.putExtra("bf_FN", bf_FN);
                 intent.putExtra("eatTime", eatTime);
-                intent.putExtra("record", record);
                 intent.putExtra("DATE", nowtime);
                 intent.putExtra("foodNum", foodNum);
                 intent.putExtra("txtStr", txtStr);

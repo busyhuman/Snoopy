@@ -107,65 +107,7 @@ public class SignupActivity extends AppCompatActivity {
         edtID.setFilters(new InputFilter[] {filter});
         edtPW.setFilters(new InputFilter[] {filter});
         edtPW2.setFilters(new InputFilter[] {filter});
-
         edtName.setFilters(new InputFilter[] {filterKor});
-
-        edtID.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        edtPW.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        edtPW2.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        edtName.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        edtAge.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        edtH.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        edtW.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
 
 
         dialogView = (View)View.inflate(SignupActivity.this, R.layout.activity_index, null);
@@ -206,14 +148,12 @@ public class SignupActivity extends AppCompatActivity {
                         id = edtID.getText().toString();
 
                         if(!id.equals("")){
-                            String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id,
+                            String str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/users/?format=json&ID=" + id,
                                     "GET", null);
-                            System.out.println("회원가입: "+ str);
                             try {
                                 JSONArray jarray = new JSONArray(str); // JSONArray 생성
                                 JSONObject jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                                 id2 = jsonObj.getString("ID");
-                                System.out.println(id2);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -305,8 +245,8 @@ public class SignupActivity extends AppCompatActivity {
                         try{
                             float kcal = ((Float.parseFloat(hei) - 100.0f ) * 0.9f) * Float.parseFloat(act);
                             String post = "ID="+id+"&PW="+pw+"&UserName="+URLEncoder.encode(name, "UTF-8")+"&Age="+age+"&Sex="+URLEncoder.encode(sex, "UTF-8")+"&Height="+hei+"&Weight="+wei+"&ActivityIndex="+act + "&UserKcal="+String.valueOf(kcal);
-                            System.out.println("회원가입 성공: "+SnoopyHttpConnection.makeConnection("http://busyhuman.pythonanywhere.com/users/?format=json",
-                                    "POST", post));
+                            SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/users/?format=json",
+                                    "POST", post);
                         }catch (UnsupportedEncodingException e){
                             e.printStackTrace();
                         }
@@ -378,7 +318,8 @@ public class SignupActivity extends AppCompatActivity {
                     }
 
                     Intent intent = new Intent(getApplicationContext(), SignupendActivity.class);
-                    intent.putExtra("ID",id);
+                    intent.putExtra("ID", id);
+                    intent.putExtra("PW", pw);
                     startActivity(intent);
 
                 }

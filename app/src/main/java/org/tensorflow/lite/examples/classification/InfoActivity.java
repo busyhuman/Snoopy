@@ -20,20 +20,24 @@ import org.tensorflow.lite.examples.classification.SnoopyConnection.SnoopyHttpCo
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static org.tensorflow.lite.examples.classification.Main_StatsActivity.editor1;
+import static org.tensorflow.lite.examples.classification.Main_StatsActivity.setting1;
+
 public class InfoActivity extends AppCompatActivity {
 
     int i = 0;
     String[] c_FoodName = new String[3];
+    String[] bf_FN = new String[3];
     String spi;
     int foodNum, eatTime, fdID, bookbool, booknum;
     String fd_name, ID, nowtime;
     TextView txtsize, txtkcal, txtcar, txtpro, txtfat, txtNa;
     JSONArray jarray;
     JSONObject jsonObj;
-    int record;
     myDBHelper myHelper;
     SQLiteDatabase sqlDB;
     Cursor cursor;
+    int record;
 
     int size;
     float[] Serving = new float[3];
@@ -43,12 +47,20 @@ public class InfoActivity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         Intent intent = new Intent(this, Add_BookmarkActivity.class);
-        intent.putExtra("FoodName", c_FoodName);
+        intent.putExtra("FoodName", bf_FN);
         intent.putExtra("ID", ID);
         intent.putExtra("FoodID", fdID);
         intent.putExtra("bookbool", 1);
         intent.putExtra("Serving", Serving);
-        intent.putExtra("record", record);
+
+        if(record==1) {
+            editor1.putInt("record", 1);
+            editor1.commit();
+        } else if (record==0) {
+            editor1.putInt("record", 0);
+            editor1.commit();
+        }
+
         intent.putExtra("eatTime", eatTime);
         intent.putExtra("DATE", nowtime);
         intent.putExtra("foodNum", foodNum);
@@ -68,13 +80,13 @@ public class InfoActivity extends AppCompatActivity {
 
         Serving = intent.getFloatArrayExtra("Serving");
         c_FoodName = intent.getStringArrayExtra("FoodName");
+        bf_FN = intent.getStringArrayExtra("bf_FN");
         foodNum = intent.getIntExtra("foodNum", 0);
         fdID = intent.getIntExtra("FoodID", 0);
         bookbool = intent.getIntExtra("bookbool", 0);
         ID = intent.getStringExtra("ID");
         eatTime = intent.getIntExtra("eatTime",0);
         nowtime = intent.getStringExtra("DATE");
-        record = intent.getIntExtra("record", 0);
 
         TextView fd_nameView = (TextView) findViewById(R.id.fd_name);
 
@@ -119,7 +131,6 @@ public class InfoActivity extends AppCompatActivity {
             pro = cursor.getFloat(3);
             fat = cursor.getFloat(4);
             Na = cursor.getFloat(5);
-            System.out.println(size + " " + f_kcal + " " +carbo + " " +pro + " " +fat + " "+Na + " ");
         }
 
         sqlDB.close();
@@ -151,18 +162,15 @@ public class InfoActivity extends AppCompatActivity {
 
         class NewRunnable implements Runnable {
 
-
             @Override
             public void run() {
-                String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/bookmarks/?format=json&ID="+ ID + "&FoodNum=" + String.valueOf(fdID),
+                String str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/bookmarks/?format=json&ID="+ ID + "&FoodNum=" + String.valueOf(fdID),
                         "GET", null);
-                System.out.println("북마크 검색: "+str);
                 mHandler.postDelayed(new Runnable() { public void run() {
                     try {
                         jarray = new JSONArray(str); // JSONArray 생성
                         jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                         booknum = jsonObj.getInt("BMNum");
-                        System.out.println("북마크 num: " + booknum);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -186,29 +194,25 @@ public class InfoActivity extends AppCompatActivity {
                     public void run() {
 
                         if ( bookbool == 1 ){
-                            System.out.println("삭제" + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/bookmarks/" + String.valueOf(booknum) + "/", "DELETE", null));
+                            SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/bookmarks/" + String.valueOf(booknum) + "/", "DELETE", null);
                             bookmark.setImageResource(R.drawable.star_off);
-                            System.out.println("삭제 완료");
                             bookbool = 0;
                         }
                         else if ( bookbool == 0 ){
                             String post = "user=" + ID + "&FoodNum=" + String.valueOf(fdID);
-                            System.out.println("삽입: " + SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/bookmarks/?format=json",
-                                    "POST", post));
-                            System.out.println("삽입 완료");
+                            SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/bookmarks/?format=json",
+                                    "POST", post);
                             bookmark.setImageResource(R.drawable.star_on);
                             bookbool = 1;
 
-                            String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/bookmarks/?format=json&ID="+ ID + "&FoodNum=" + String.valueOf(fdID),
+                            String str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/bookmarks/?format=json&ID="+ ID + "&FoodNum=" + String.valueOf(fdID),
                                     "GET", null);
-                            System.out.println(str);
 
                             mHandler.postDelayed(new Runnable() { public void run() {
                                 try {
                                     jarray = new JSONArray(str); // JSONArray 생성
                                     jsonObj = jarray.getJSONObject(0);  // JSONObject 추출
                                     booknum = jsonObj.getInt("BMNum");
-                                    System.out.println("북마크 num: " + booknum);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -258,13 +262,25 @@ public class InfoActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                record = setting1.getInt("record", 0);
+
                 Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
+
+                if(record==1) {
+                    editor1.putInt("record", 2);
+                    editor1.commit();
+                } else if (record==0) {
+                    editor1.putInt("record", 0);
+                    editor1.commit();
+                }
+
                 intent.putExtra("Serving", Serving);
                 intent.putExtra("FoodName", c_FoodName);
                 intent.putExtra("ID", ID);
                 intent.putExtra("eatTime", eatTime);
                 intent.putExtra("DATE", nowtime);
-                intent.putExtra("record", 0);
                 intent.putExtra("foodNum", foodNum);
                 startActivity(intent);
             }

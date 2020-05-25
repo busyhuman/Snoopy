@@ -43,6 +43,8 @@
 
             <EditText
                 android:id="@+id/edtID"
+                android:singleLine = "true"
+                android:lines = "1"
                 android:layout_width="250dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
@@ -63,6 +65,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="5dp"
+            android:singleLine = "true"
+            android:lines = "1"
             android:hint="비밀번호"
             android:inputType="textPassword"
             android:textSize="15dp" />
@@ -73,6 +77,8 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:hint="비밀번호 확인"
+            android:singleLine = "true"
+            android:lines = "1"
             android:inputType="textPassword"
             android:textSize="15dp" />
 
@@ -83,6 +89,8 @@
             android:layout_margin="5dp"
             android:hint="이름"
             android:maxLength="5"
+            android:singleLine = "true"
+            android:lines = "1"
             android:textSize="15dp" />
 
         <LinearLayout
@@ -137,8 +145,11 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:hint="나이"
+            android:singleLine = "true"
+            android:lines = "1"
             android:inputType="number"
             android:maxLength="3"
+
             android:textSize="15dp" />
 
         <LinearLayout
@@ -154,6 +165,8 @@
                 android:hint="키"
                 android:inputType="number"
                 android:maxLength="3"
+                android:singleLine = "true"
+                android:lines = "1"
                 android:textSize="15dp" />
 
             <EditText
@@ -164,6 +177,8 @@
                 android:layout_marginTop="5dp"
                 android:hint="몸무게"
                 android:inputType="number"
+                android:singleLine = "true"
+                android:lines = "1"
                 android:maxLength="3"
                 android:textSize="15dp" />
 

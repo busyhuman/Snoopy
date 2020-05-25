@@ -138,13 +138,13 @@ public class Main_StatsActivity extends AppCompatActivity {
                 }
 
                 for(int i=0; i<5; i++){
-                    stat[i] = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&Date=" + cal_time[i] + "&user=" + ID,
+                    stat[i] = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/stats/?format=json&Date=" + cal_time[i] + "&user=" + ID,
                             "GET", null);
                 }
-                String user = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + ID,
+                String user = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/users/?format=json&ID=" + ID,
                         "GET", null);
                 for(int i=0; i<3; i++) {
-                    f_sate[i] = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/stats/?format=json&Date=" + cal_time[0] + "&user=" + ID + "&Timeslot=" + String.valueOf(i),
+                    f_sate[i] = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/stats/?format=json&Date=" + cal_time[0] + "&user=" + ID + "&Timeslot=" + String.valueOf(i),
                             "GET", null);
                 }
 
@@ -671,7 +671,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
                         intent.putExtra("eatTime", 0);
                         intent.putExtra("DATE", nowtime);
-                        intent.putExtra("record", 1);
+
+                        editor1.putInt("record", 1);
+                        editor1.commit();
+
                         intent.putExtra("FoodName", FoodName);
                         intent.putExtra("Serving", Serving);
                         intent.putExtra("ID", ID);
@@ -679,6 +682,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                     } else if(mykcal[0] == 0) {
                         Intent intent = new Intent(getApplicationContext(), ClassifierActivity.class);
                         intent.putExtra("eatTime", 0);
+
+                        editor1.putInt("record", 0);
+                        editor1.commit();
+
                         intent.putExtra("DATE", nowtime);
                         intent.putExtra("ID", ID);
                         startActivity(intent);
@@ -703,7 +710,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
                         intent.putExtra("eatTime", 1);
                         intent.putExtra("DATE", nowtime);
-                        intent.putExtra("record", 1);
+
+                        editor1.putInt("record", 1);
+                        editor1.commit();
+
                         intent.putExtra("FoodName", FoodName);
                         intent.putExtra("Serving", Serving);
                         intent.putExtra("ID", ID);
@@ -713,6 +723,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                         intent.putExtra("eatTime", 1);
                         intent.putExtra("DATE", nowtime);
                         intent.putExtra("ID", ID);
+
+                        editor1.putInt("record", 0);
+                        editor1.commit();
+
                         startActivity(intent);
                     }
                 }
@@ -734,7 +748,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), ImgRecordActivity.class);
                         intent.putExtra("eatTime", 2);
                         intent.putExtra("DATE", nowtime);
-                        intent.putExtra("record", 1);
+
+                        editor1.putInt("record", 1);
+                        editor1.commit();
+
                         intent.putExtra("FoodName", FoodName);
                         intent.putExtra("Serving", Serving);
                         intent.putExtra("ID", ID);
@@ -744,6 +761,10 @@ public class Main_StatsActivity extends AppCompatActivity {
                         intent.putExtra("eatTime", 2);
                         intent.putExtra("DATE", nowtime);
                         intent.putExtra("ID", ID);
+
+                        editor1.putInt("record", 0);
+                        editor1.commit();
+
                         startActivity(intent);
                     }
                 }

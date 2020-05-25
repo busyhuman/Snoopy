@@ -1,22 +1,15 @@
 package org.tensorflow.lite.examples.classification;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.lite.examples.classification.SnoopyConnection.SnoopyHttpConnection;
-
-import java.net.URLDecoder;
-
 
 public class myDBHelper extends SQLiteOpenHelper {
     Context con;
@@ -38,10 +31,10 @@ public class myDBHelper extends SQLiteOpenHelper {
                 try {
                     db.execSQL("CREATE TABLE IF NOT EXISTS foods (Num INTEGER NOT NULL PRIMARY KEY,FoodName VARCHAR(25) NOT NULL,Category VARCHAR(10) NOT NULL, ServingSize FLOAT NOT NULL,Kcal FLOAT NOT NULL,Carbo FLOAT NOT NULL,Protein FLOAT NOT NULL,Fat FLOAT NOT NULL,Natrium FLOAT NOT NULL );");
                     db.execSQL("DELETE FROM foods");
-                    String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/foods/?format=json", "GET", null);
+                    String str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/foods/?format=json", "GET", null);
                     JSONArray jarray = new JSONArray(str);
                     int len = jarray.length();
-
+                    db.beginTransaction();
                     for(int i=0;i<len;i++){
                         JSONObject jsonObj = jarray.getJSONObject(i);  // JSONObject 추출
                         int t_Num = Integer.parseInt(jsonObj.getString("Num"));
@@ -54,17 +47,19 @@ public class myDBHelper extends SQLiteOpenHelper {
                         float t_Fat = Float.parseFloat(jsonObj.getString("Fat"));
                         float t_Natrium = Float.parseFloat(jsonObj.getString("Natrium"));
                         try {
-                            db.execSQL("begin;");
                             db.execSQL("INSERT INTO foods (Num, FoodName, Category, ServingSize, Kcal, Carbo, Protein, Fat, Natrium) VALUES ('" + t_Num + "', '" + t_FoodName + "', '" + t_Category + "','" + t_ServingSize + "','" + t_Kcal + "','" + t_Carbo + "','" + t_Protein + "','" + t_Fat + "','" + t_Natrium + "');");
-                            db.execSQL("commit;");
-                        } catch (SQLiteException e){
+                        } catch (SQLiteException e) {
                             continue;
                         }
                     }
+                    db.setTransactionSuccessful();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    db.endTransaction();
                 }
-            }
+
+                    }
         }
 
         Thread t = new Thread(new NewRunnable());
@@ -75,7 +70,6 @@ public class myDBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        //   db.execSQL("INSERT INTO foods ( Num, FoodName, ServingSize, col4 ) SELECT 'col1Val','col2Val','col3Val','col4Val' FROM foods WHERE NOT EXISTS ( SELECT *  FROM `테이블명` WHERE  col1 =  'col1Val' AND  col2 =  'col2Val' AND col3 =  'col3Val');");
     }
 
     @Override

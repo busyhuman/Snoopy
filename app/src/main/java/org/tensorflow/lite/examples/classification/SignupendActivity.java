@@ -22,15 +22,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static org.tensorflow.lite.examples.classification.MainActivity.editor;
 
+
 public class SignupendActivity extends AppCompatActivity {
 
-    String t_name, t_kcal, ID;
+    String t_name, t_kcal, ID, PW;
     TextView name, kcal;
     String str;
     JSONArray userArray;
     JSONObject userObj;
-
-    static SharedPreferences.Editor editor;
 
     private void renew() {
 
@@ -38,10 +37,8 @@ public class SignupendActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID="+ ID,
+                str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/users/?format=json&ID="+ ID,
                         "GET", null);
-                System.out.println("회원가입 완료 검색: " + str);
-                System.out.println("회원가입 완료 ID: " + ID);
 
 
                 try{
@@ -49,7 +46,6 @@ public class SignupendActivity extends AppCompatActivity {
                     userObj = userArray.getJSONObject(0);
                     t_name = userObj.getString("UserName");
                     t_kcal = userObj.getString("UserKcal");
-                    System.out.println(t_name + " " + t_kcal);
 
                 } catch (JSONException e){
                     e.printStackTrace();
@@ -79,6 +75,7 @@ public class SignupendActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ID = intent.getStringExtra("ID");
+        PW = intent.getStringExtra("PW");
 
 
         renew();
@@ -94,6 +91,8 @@ public class SignupendActivity extends AppCompatActivity {
                 editor.putInt("chk", 0);
 
                 editor.commit();
+
+                intent.putExtra("ID", ID);
 
                 startActivity(intent);
             }

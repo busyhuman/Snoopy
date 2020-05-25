@@ -94,22 +94,6 @@ public class MainActivity extends AppCompatActivity {
         id.setFilters(new InputFilter[] {filter});
         pw.setFilters(new InputFilter[] {filter});
 
-        id.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
-        pw.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode==event.KEYCODE_ENTER) return true;
-                return false;
-            }
-        });
-
 
 
 
@@ -167,9 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 class NewRunnable implements Runnable {
                     @Override
                     public void run() {
-                        String str = SnoopyHttpConnection.makeConnection("https://busyhuman.pythonanywhere.com/users/?format=json&ID=" + id_str,
+                        String str = SnoopyHttpConnection.makeConnection("https://khd8593.pythonanywhere.com/users/?format=json&ID=" + id_str,
                                 "GET", null);
-                        System.out.println(str);
 
                         mHandler.postDelayed(new Runnable() { public void run() {
                              if(id_str.equals("") || pw_str.equals("")){err.setVisibility(View.VISIBLE);}

@@ -50,7 +50,7 @@ public class WidgetActivity extends AppWidgetProvider {
 
 
 
-    SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Date date = new Date();
     Calendar cal = Calendar.getInstance();
     String DATE;

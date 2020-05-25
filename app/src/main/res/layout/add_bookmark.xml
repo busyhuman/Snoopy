@@ -67,11 +67,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <EditText
+                            android:singleLine = "true"
+                            android:lines = "1"
                             android:layout_width="250dp"
                             android:id="@+id/search_txt"
                             android:layout_height="wrap_content"
                             >
-
                         </EditText>
 
                         <Button

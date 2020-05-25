@@ -21,8 +21,8 @@ public class SnoopyHttpConnection {
 
             uri = new URL(url);
 
-            con.setConnectTimeout(5000);
-            con.setReadTimeout(5000);
+            con.setConnectTimeout(10000);
+            con.setReadTimeout(10000);
             con.setRequestProperty("Content-type", "application/x-www-form-urlencoded; charset=utf-8"); // 페이지 마다 다를 수 있음
             con.setRequestMethod(type);
             if (reqbody != null) {
